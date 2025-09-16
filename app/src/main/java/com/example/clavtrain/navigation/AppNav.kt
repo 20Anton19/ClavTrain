@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.clavtrain.ui.AdminModeScreen
 import com.example.clavtrain.ui.EntryLKScreen
 import com.example.clavtrain.ui.MainScreen
-import com.example.clavtrain.ui.TrainingScreen
+import com.example.clavtrain.ui.RegisterLKScreen
 
 @Composable
 fun AppNav() {
@@ -18,21 +19,40 @@ fun AppNav() {
         composable(Route.Main.path) {
             MainScreen(
                 onStartTraining = {
-                    navController.navigate(Route.Training.path)
+                    navController.navigate(Route.EntryLK.path)
                 }
             )
         }
-        composable(Route.Training.path) {
-            TrainingScreen(
-                onFinish = {
-                    navController.navigate(Route.Results.path)
-                }
-            )
-        }
-        composable(Route.Results.path) {
+        composable(Route.EntryLK.path) {
             EntryLKScreen(
-                onBackToStart = {
-                    navController.popBackStack(route = Route.Main.path, inclusive = false)
+                onLoginClick = {
+                    navController.navigate(Route.RegisterLK.path) //пока так
+                },
+                onRegisterClick = {
+                    navController.navigate(Route.RegisterLK.path)
+                }
+            )
+        }
+        composable(Route.RegisterLK.path) {
+            RegisterLKScreen(
+                onContinueClick = {
+                    navController.navigate(Route.Main.path) //пока так
+                }
+            )
+        }
+        composable(Route.AdminMode.path) {
+            AdminModeScreen(
+                onViewExercises = {
+                    navController.navigate(Route.Main.path) //пока так
+                },
+                onViewDifficultyLevels = {
+                    navController.navigate(Route.Main.path) //пока так
+                },
+                onViewUserStatistics = {
+                    navController.navigate(Route.Main.path) //пока так
+                },
+                onViewStatisticsOfExerciseCompletion = {
+                    navController.navigate(Route.Main.path) //пока так
                 }
             )
         }

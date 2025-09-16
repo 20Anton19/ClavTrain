@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1035399687420",
+    "project_id": "my-clavtrain",
+    "storage_bucket": "my-clavtrain.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1035399687420:android:6f0086874f4ab2ddd23b79",
+        "android_client_info": {
+          "package_name": "com.example.clavtrain"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTt64XsnDOGEpuBt9Pj4R1T2HUnu7aH7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

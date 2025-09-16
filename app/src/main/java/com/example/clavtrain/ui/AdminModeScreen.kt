@@ -2,21 +2,15 @@ package com.example.clavtrain.ui
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,15 +19,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.clavtrain.ui.theme.ClavTrainTheme
 
+
 @Composable
-fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
+fun AdminModeScreen(
+    onViewExercises: () -> Unit,
+    onViewDifficultyLevels: () -> Unit,
+    onViewUserStatistics: () -> Unit,
+    onViewStatisticsOfExerciseCompletion: () -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -89,7 +87,7 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
                 shape = RoundedCornerShape(10.dp)
             )
             Button(
-                onClick = onLoginClick,
+                onClick = onViewExercises,
                 modifier = Modifier
                     .padding(vertical = 15.dp)
                     .fillMaxWidth(),
@@ -117,7 +115,7 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
             textAlign = TextAlign.Left
         )
         Button(
-            onClick = onRegisterClick,
+            onClick = onViewExercises,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp),
@@ -133,6 +131,11 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
 
 @Preview(showBackground = true)
 @Composable
-private fun EntryLKScreenPreview() {
-    ClavTrainTheme { EntryLKScreen(onLoginClick = {}, onRegisterClick = {}) }
-} 
+private fun AdminModeScreenPreview() {
+    ClavTrainTheme { AdminModeScreen(
+        onViewExercises = {},
+        onViewDifficultyLevels = {},
+        onViewUserStatistics = {},
+        onViewStatisticsOfExerciseCompletion = {}
+    ) }
+}
