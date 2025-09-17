@@ -26,7 +26,7 @@ fun AppNav() {
         composable(Route.EntryLK.path) {
             EntryLKScreen(
                 onLoginClick = {
-                    navController.navigate(Route.RegisterLK.path) //пока так
+                    navController.navigate(Route.Main.path) //пока так
                 },
                 onRegisterClick = {
                     navController.navigate(Route.RegisterLK.path)

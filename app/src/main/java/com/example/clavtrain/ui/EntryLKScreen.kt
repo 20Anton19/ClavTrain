@@ -1,5 +1,7 @@
 package com.example.clavtrain.ui
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,11 +33,15 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.clavtrain.ui.theme.ClavTrainTheme
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 @Composable
 fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val auth = Firebase.auth
 
     Column(
         modifier = Modifier
@@ -89,7 +95,10 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
                 shape = RoundedCornerShape(10.dp)
             )
             Button(
-                onClick = onLoginClick,
+                onClick = //onContinueClick
+                    {
+                        signIn(auth, email, password, onLoginClick)
+                    },
                 modifier = Modifier
                     .padding(vertical = 15.dp)
                     .fillMaxWidth(),
@@ -101,7 +110,6 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
                 Text("Войти")
             }
         }
-
         Text(
             text = "*Вы новый пользователь?",
             modifier = Modifier
@@ -124,8 +132,22 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
     }
 }
 
+private fun signIn(auth: FirebaseAuth, email: String, pass: String, onLoginClick: () -> Unit) {
+    auth.signInWithEmailAndPassword(email, pass)
+        .addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d(TAG, "signInWithEmail:success")
+                onLoginClick()
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w(TAG, "signInWithEmail:failure", task.exception)
+            }
+        }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun EntryLKScreenPreview() {
     ClavTrainTheme { EntryLKScreen(onLoginClick = {}, onRegisterClick = {}) }
-} 
+}
