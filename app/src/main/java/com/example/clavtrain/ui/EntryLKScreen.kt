@@ -100,13 +100,6 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
             ) {
                 Text("Войти")
             }
-            Text(
-                text = "Забыли пароль?",
-                modifier = Modifier
-                    .padding(bottom = 40.dp)
-                    .fillMaxWidth(),
-                textAlign = TextAlign.Left
-            )
         }
 
         Text(
