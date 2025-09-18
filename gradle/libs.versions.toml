@@ -11,7 +11,8 @@ composeBom = "2024.09.00"
 navCompose = "2.8.2"
 
 gmsVersion = "4.4.3"
-bomVersion = "34.2.0"
+bomVersion = "34.3.0"
+runtime = "1.9.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,6 +34,10 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "bomVersion" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth"}
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
+
+androidx-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

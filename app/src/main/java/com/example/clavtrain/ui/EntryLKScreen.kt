@@ -20,6 +20,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,13 +37,25 @@ import com.example.clavtrain.ui.theme.ClavTrainTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val auth = Firebase.auth
+    val db = Firebase.firestore
+    db.collection("try")
+        .document()
+        .set(mapOf("1" to "b"))
 
+    LaunchedEffect(Unit) {
+
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            onLoginClick()
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize(),
