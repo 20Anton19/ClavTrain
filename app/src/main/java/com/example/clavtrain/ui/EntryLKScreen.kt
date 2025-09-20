@@ -45,12 +45,27 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
     var password by remember { mutableStateOf("") }
     val auth = Firebase.auth
     val db = Firebase.firestore
-    db.collection("try")
-        .document()
-        .set(mapOf("1" to "b"))
+
+    val isAdminState = remember {mutableStateOf(false) }               //Автоматическое обновление UI при изменении значения, из-за ремембер
+    if (isAdminState.value) {
+
+    }
 
     LaunchedEffect(Unit) {
+        isAdmin { isAdmin ->
+            isAdminState.value = isAdmin
 
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            onLoginClick()
+        }
+    }
+
+    LaunchedEffect(Unit) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             onLoginClick()
@@ -156,6 +171,15 @@ private fun signIn(auth: FirebaseAuth, email: String, pass: String, onLoginClick
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "signInWithEmail:failure", task.exception)
             }
+        }
+}
+
+private fun isAdmin(onAdmin: (Boolean) -> Unit) {
+    val uid = Firebase.auth.currentUser!!.uid
+    Firebase.firestore.collection("admin")
+        .document(uid).get().addOnSuccessListener {
+            Log.d("Mylog", "isAdmin: ${it.get("isAdmin")}")
+            onAdmin(it.get("isAdmin") as Boolean)
         }
 }
 
