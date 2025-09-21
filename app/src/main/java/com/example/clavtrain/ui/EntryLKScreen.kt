@@ -40,13 +40,14 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
 @Composable
-fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
+fun EntryLKScreen(onLoginSuccess: () -> Unit, onRegisterClick: () -> Unit) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val auth = Firebase.auth
     val db = Firebase.firestore
 
-    val isAdminState = remember {mutableStateOf(false) }               //Автоматическое обновление UI при изменении значения, из-за ремембер
+    /*
+    val isAdminState = remember {mutableStateOf(false) }  //Автоматическое обновление UI при изменении значения, из-за ремембер
     if (isAdminState.value) {
 
     }
@@ -57,20 +58,14 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
 
         }
     }
-
+    */
     LaunchedEffect(Unit) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            onLoginClick()
+            onLoginSuccess()
         }
     }
 
-    LaunchedEffect(Unit) {
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            onLoginClick()
-        }
-    }
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -125,7 +120,7 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
             Button(
                 onClick = //onContinueClick
                     {
-                        signIn(auth, email, password, onLoginClick)
+                        signIn(auth, email, password, onLoginSuccess)
                     },
                 modifier = Modifier
                     .padding(vertical = 15.dp)
@@ -160,13 +155,13 @@ fun EntryLKScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
     }
 }
 
-private fun signIn(auth: FirebaseAuth, email: String, pass: String, onLoginClick: () -> Unit) {
+private fun signIn(auth: FirebaseAuth, email: String, pass: String, onLoginSuccess: () -> Unit) {
     auth.signInWithEmailAndPassword(email, pass)
         .addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 // Sign in success, update UI with the signed-in user's information
                 Log.d(TAG, "signInWithEmail:success")
-                onLoginClick()
+                onLoginSuccess()
             } else {
                 // If sign in fails, display a message to the user.
                 Log.w(TAG, "signInWithEmail:failure", task.exception)
@@ -174,17 +169,9 @@ private fun signIn(auth: FirebaseAuth, email: String, pass: String, onLoginClick
         }
 }
 
-private fun isAdmin(onAdmin: (Boolean) -> Unit) {
-    val uid = Firebase.auth.currentUser!!.uid
-    Firebase.firestore.collection("admin")
-        .document(uid).get().addOnSuccessListener {
-            Log.d("Mylog", "isAdmin: ${it.get("isAdmin")}")
-            onAdmin(it.get("isAdmin") as Boolean)
-        }
-}
 
 @Preview(showBackground = true)
 @Composable
 private fun EntryLKScreenPreview() {
-    ClavTrainTheme { EntryLKScreen(onLoginClick = {}, onRegisterClick = {}) }
+    ClavTrainTheme { EntryLKScreen(onLoginSuccess = {}, onRegisterClick = {}) }
 }

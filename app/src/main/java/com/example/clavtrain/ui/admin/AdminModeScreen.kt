@@ -1,4 +1,4 @@
-package com.example.clavtrain.ui
+package com.example.clavtrain.ui.admin
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -55,7 +55,7 @@ fun AdminModeScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Email",
+                text = "Это админ страница",
                 modifier = Modifier
                     .padding(top = 30.dp)
                     .fillMaxWidth(),
