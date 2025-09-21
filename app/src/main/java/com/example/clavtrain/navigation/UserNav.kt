@@ -1,35 +1,47 @@
 package com.example.clavtrain.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.clavtrain.ui.MainScreen
-import com.example.clavtrain.ui.RegisterLKScreen
+import com.example.clavtrain.ui.user.AboutDevelopersScreen
+import com.example.clavtrain.ui.user.InfoScreen
+import com.example.clavtrain.ui.user.UserDifficultyScreen
+import com.example.clavtrain.ui.user.UserLKScreen
+import com.example.clavtrain.ui.user.UserMenuScreen
 
 @Composable
 fun UserNav() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Route.UserMain.path) {
-        /*
-        composable(Route.UserTraining.path) {
-            // TODO: UserTrainingScreen
-            MainScreen(
-                onStartTraining = {
-                    navController.navigate(Route.UserMain.path)
+    NavHost(navController = navController, startDestination = Route.UserMenu.path) {
+        composable(Route.UserMenu.path) {
+            UserMenuScreen(
+                onViewDifficulty = {
+                    navController.navigate(Route.UserDifficulty.path)
+                },
+                onViewUserLK = {
+                    navController.navigate(Route.UserLK.path)
+                },
+                onViewInfo = {
+                    navController.navigate(Route.Info.path)
+                },
+                onViewAboutDevelopers = {
+                    navController.navigate(Route.AboutDevelopers.path)
                 }
             )
         }
-        composable(Route.UserResults.path) {
-            // TODO: UserResultsScreen
-            MainScreen(
-                onStartTraining = {
-                    navController.navigate(Route.UserMain.path)
-                }
-            )
+        composable(Route.UserDifficulty.path) {
+            UserDifficultyScreen()
         }
-         */
+        composable(Route.UserLK.path) {
+            UserLKScreen()
+        }
+        composable(Route.Info.path) {
+            InfoScreen()
+        }
+        composable(Route.AboutDevelopers.path) {
+            AboutDevelopersScreen()
+        }
     }
 }

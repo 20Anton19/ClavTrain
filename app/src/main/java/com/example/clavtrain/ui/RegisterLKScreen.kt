@@ -125,6 +125,7 @@ fun RegisterLKScreen(onContinueClick: () -> Unit) {
             Button(
                 onClick = //onContinueClick
                     {
+                        Log.d("MyRagisterCheck", "Кликнул")
                         signUp(auth, email, password, onContinueClick)
                     },
                 modifier = Modifier
@@ -149,6 +150,7 @@ private fun RegisterLKScreenPreview() {
 }
 
 private fun signUp(auth: FirebaseAuth, email: String, pass: String, onContinueClick: () -> Unit) {
+    Log.d("MyRagisterCheck", "Попал в signUp")
     auth.createUserWithEmailAndPassword(email, pass)
         .addOnCompleteListener() { task ->
             if (task.isSuccessful) {

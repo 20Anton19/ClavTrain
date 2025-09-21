@@ -8,6 +8,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import com.example.clavtrain.data.AppNav
 import com.example.clavtrain.data.UserRole
 import com.example.clavtrain.navigation.AdminNav
 import com.example.clavtrain.navigation.AuthNav
@@ -21,7 +22,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             ClavTrainTheme {
                 var currentNav by remember { mutableStateOf<AppNav>(AppNav.AUTH) }
-                // Переключаемся между NavHost
                 when (currentNav) {
                     AppNav.AUTH -> AuthNav(
                         onRoleDetermined = { role ->
@@ -38,8 +38,4 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
-
-enum class AppNav {
-    AUTH, ADMIN, USER
 }

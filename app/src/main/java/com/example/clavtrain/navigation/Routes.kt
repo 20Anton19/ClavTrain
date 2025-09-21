@@ -8,9 +8,11 @@ sealed class Route(val path: String) {
     data object RegisterLK : Route("registerLK")
     
     // User routes
-    data object UserMain : Route("user_main")
-    data object UserTraining : Route("user_training")
-    data object UserResults : Route("user_results")
+    data object UserMenu : Route("user_menu")
+    data object UserDifficulty : Route("user_difficulty")
+    data object UserLK : Route("user_lk")
+    data object Info : Route("info")
+    data object AboutDevelopers : Route("about_developers")
     
     // Admin routes
     data object AdminMain : Route("admin_main")
