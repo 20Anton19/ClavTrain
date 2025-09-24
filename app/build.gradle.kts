@@ -41,10 +41,20 @@ android {
 }
 
 dependencies {
-
+    //Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
+
+    //Koin
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.android)
+    implementation(libs.koin.core)
+    implementation(libs.koin.core.coroutines)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.navigation)
+
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
