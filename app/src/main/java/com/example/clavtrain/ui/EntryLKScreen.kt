@@ -40,7 +40,10 @@ import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 
 @Composable
-fun EntryLKScreen(onLoginSuccess: () -> Unit, onRegisterClick: () -> Unit) {
+fun EntryLKScreen(
+    onLoginSuccess: () -> Unit,
+    onRegisterClick: () -> Unit
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val auth = Firebase.auth

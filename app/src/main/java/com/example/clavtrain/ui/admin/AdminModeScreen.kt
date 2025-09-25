@@ -35,7 +35,8 @@ fun AdminModeScreen(
     onViewExercises: () -> Unit,
     onViewDifficultyLevels: () -> Unit,
     onViewUserStatistics: () -> Unit,
-    onViewStatisticsOfExerciseCompletion: () -> Unit
+    onViewStatisticsOfExerciseCompletion: () -> Unit,
+    onExitApp: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -101,7 +102,7 @@ fun AdminModeScreen(
         }
         Spacer(modifier = Modifier.weight(1f))
         Button(
-            onClick = {},
+            onClick = onExitApp,
             modifier = Modifier
                 .width(250.dp)
                 .padding(vertical = 8.dp)
@@ -118,6 +119,7 @@ private fun AdminModeScreenPreview() {
         onViewExercises = {},
         onViewDifficultyLevels = {},
         onViewUserStatistics = {},
-        onViewStatisticsOfExerciseCompletion = {}
+        onViewStatisticsOfExerciseCompletion = {},
+        onExitApp = {}
     ) }
 }

@@ -11,7 +11,7 @@ import com.example.clavtrain.ui.user.UserLKScreen
 import com.example.clavtrain.ui.user.UserMenuScreen
 
 @Composable
-fun UserNav() {
+fun UserNav(onExitApp: () -> Unit) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Route.UserMenu.path) {
@@ -28,6 +28,9 @@ fun UserNav() {
                 },
                 onViewAboutDevelopers = {
                     navController.navigate(Route.AboutDevelopers.path)
+                },
+                onExitApp = {
+                    onExitApp()
                 }
             )
         }

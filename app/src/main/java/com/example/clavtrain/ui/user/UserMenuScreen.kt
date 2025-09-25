@@ -22,7 +22,8 @@ fun UserMenuScreen(
     onViewDifficulty: () -> Unit,
     onViewUserLK: () -> Unit,
     onViewInfo: () -> Unit,
-    onViewAboutDevelopers: () -> Unit
+    onViewAboutDevelopers: () -> Unit,
+    onExitApp: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -87,7 +88,7 @@ fun UserMenuScreen(
         }
         Spacer(modifier = Modifier.weight(1f))
         Button(
-            onClick = {},
+            onClick = onExitApp,
             modifier = Modifier
                 .width(250.dp)
                 .padding(vertical = 8.dp)
@@ -99,11 +100,12 @@ fun UserMenuScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun AdminModeScreenPreview() {
+private fun UserMenuScreenPreview() {
     ClavTrainTheme { UserMenuScreen(
         onViewDifficulty = {},
         onViewUserLK = {},
         onViewInfo = {},
-        onViewAboutDevelopers = {}
+        onViewAboutDevelopers = {},
+        onExitApp = {}
     ) }
 }

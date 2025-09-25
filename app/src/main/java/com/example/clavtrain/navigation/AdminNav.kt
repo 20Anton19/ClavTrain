@@ -7,7 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.clavtrain.ui.admin.AdminModeScreen
 
 @Composable
-fun AdminNav() {
+fun AdminNav(onExitApp: () -> Unit) {
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = Route.AdminMain.path) {
@@ -24,6 +24,9 @@ fun AdminNav() {
                 },
                 onViewStatisticsOfExerciseCompletion = {
                     navController.navigate(Route.AdminStats.path)
+                },
+                onExitApp = {
+                    onExitApp()
                 }
             )
         }
