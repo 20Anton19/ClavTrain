@@ -16,9 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,11 +24,11 @@ import androidx.compose.ui.unit.sp
 import com.example.clavtrain.ui.theme.ClavTrainTheme
 
 @Composable
-fun UserDifficultyScreen(
-    onViewExcercises: () -> Unit,
+fun UserExercisesScreen(
+    onStartTraining: () -> Unit,
     onBackClick: () -> Unit
 ) {
-    val difficulties = listOf("Легко", "Нормально", "Сложно", "Очень сложно", "Профи")
+    val exercisesAmount = 3// Здесь будет загрузка из бд и длина массива мб
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -38,7 +36,7 @@ fun UserDifficultyScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Выбор сложности",
+            text = "Список упражнений",
             //style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier
                 .fillMaxWidth()
@@ -48,9 +46,9 @@ fun UserDifficultyScreen(
             fontSize = 24.sp
         )
         LazyColumn {
-            items(difficulties) { difficulty ->
+            items(exercisesAmount) { item ->
                 Button(
-                    onClick = onViewExcercises,
+                    onClick = onStartTraining,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xffe6d9e8),
                         contentColor = Color.Black
@@ -62,7 +60,7 @@ fun UserDifficultyScreen(
                         .height(50.dp)
                 ) {
                     Text(
-                        text = difficulty,
+                        text = "Упражнение ${item+1}",
                         modifier = Modifier.fillMaxWidth(),
                         fontSize = 17.sp,
                         textAlign = TextAlign.Start
@@ -84,6 +82,6 @@ fun UserDifficultyScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun UserDifficultyPreview() {
-    ClavTrainTheme { UserDifficultyScreen(onViewExcercises = {}, onBackClick = {}) }
+private fun UserExercisesPreview() {
+    ClavTrainTheme { UserExercisesScreen(onStartTraining = {}, onBackClick = {}) }
 }
