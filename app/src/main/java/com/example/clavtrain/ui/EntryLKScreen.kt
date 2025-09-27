@@ -33,38 +33,32 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.clavtrain.ui.theme.ClavTrainTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun EntryLKScreen(
     onLoginSuccess: () -> Unit,
-    onRegisterClick: () -> Unit
+    onRegisterClick: () -> Unit,
+    viewModel: EntryLKViewModel = koinViewModel()
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val auth = Firebase.auth
-    val db = Firebase.firestore
-
-    /*
-    val isAdminState = remember {mutableStateOf(false) }  //Автоматическое обновление UI при изменении значения, из-за ремембер
-    if (isAdminState.value) {
-
-    }
+    val loginState by viewModel.loginState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        isAdmin { isAdmin ->
-            isAdminState.value = isAdmin
-
+        if (viewModel.checkCurrentUser()) {
+            onLoginSuccess()
         }
     }
-    */
-    LaunchedEffect(Unit) {
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
+
+    LaunchedEffect(loginState) {
+        if (loginState is LoginState.Success) {
             onLoginSuccess()
         }
     }
@@ -121,10 +115,7 @@ fun EntryLKScreen(
                 shape = RoundedCornerShape(10.dp)
             )
             Button(
-                onClick = //onContinueClick
-                    {
-                        signIn(auth, email, password, onLoginSuccess)
-                    },
+                onClick = {viewModel.signIn(email, password)},
                 modifier = Modifier
                     .padding(vertical = 15.dp)
                     .fillMaxWidth(),
@@ -156,20 +147,6 @@ fun EntryLKScreen(
             Text("Регистрация")
         }
     }
-}
-
-private fun signIn(auth: FirebaseAuth, email: String, pass: String, onLoginSuccess: () -> Unit) {
-    auth.signInWithEmailAndPassword(email, pass)
-        .addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
-                Log.d(TAG, "signInWithEmail:success")
-                onLoginSuccess()
-            } else {
-                // If sign in fails, display a message to the user.
-                Log.w(TAG, "signInWithEmail:failure", task.exception)
-            }
-        }
 }
 
 
