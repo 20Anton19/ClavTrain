@@ -17,6 +17,9 @@ runtime = "1.9.1"
 koin-bom = "4.1.1"
 ksp = "2.0"
 
+ychartsVersion = "2.1.0"
+uiGraphics = "1.9.2"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -49,6 +52,9 @@ koin-core-coroutines = { module = "io.insert-koin:koin-core-coroutines" }
 koin-compose = { module = "io.insert-koin:koin-androidx-compose" }
 koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navigation" }
 
+#Гистограмы
+ycharts = { module = "co.yml:ycharts", version.ref = "ychartsVersion"}
+ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
