@@ -20,6 +20,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.clavtrain.data.UserRole
 import com.example.clavtrain.navigation.AdminNav
 import com.example.clavtrain.navigation.UserNav
@@ -27,43 +29,23 @@ import com.example.clavtrain.ui.theme.ClavTrainTheme
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreen(
     onLoginClick: () -> Unit,
-    onRoleDetermined: (UserRole?) -> Unit  // ← Колбэк для определения роли
+    onRoleDetermined: (UserRole?) -> Unit,  // ← Колбэк для определения роли
+    viewModel: MainViewModel = koinViewModel()
 ) {
-    var userRole by remember { mutableStateOf<UserRole?>(null) }
+    val userRole by viewModel.userRole.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        checkUserRole { role ->
-            userRole = role
-            onRoleDetermined(role)  // ← Сообщаем наружу
-        }
+        viewModel.checkUserRole()
     }
 
-    /*
-    when (userRole) {
-        UserRole.ADMIN -> AdminNav()
-        UserRole.USER -> UserNav()
-        null ->  {
-            Log.d("MyLog", "role is null")
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                Text(text = "Клавиатурный тренажёр")
-                Button(
-                    modifier = Modifier.padding(top = 16.dp),
-                    onClick = onLoginClick
-                ) {
-                    Text("Войти")
-                }
-            }
-        }
+    LaunchedEffect(userRole) {
+        onRoleDetermined(userRole)
     }
-*/
     if (userRole == null) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -86,35 +68,6 @@ fun MainScreen(
     }
 
 
-}
-
-private fun checkUserRole(onResult: (UserRole?) -> Unit) {
-    val auth = Firebase.auth
-    val currentUser = auth.currentUser
-
-    if (currentUser == null) {
-        Log.d("MyLog", "Пользователь не авторизован")
-        onResult(null)
-        return
-    }
-
-    Log.d("MyLog", "Проверка роли для: ${currentUser.email} (${currentUser.uid})")
-
-    val db = Firebase.firestore
-    val uid = currentUser.uid
-
-    db.collection("admin")
-        .document(uid)
-        .get()
-        .addOnSuccessListener {
-            val isAdmin = it.exists()
-            Log.d("MyLog", "Документ существует - пользователь АДМИН: $isAdmin")
-
-            onResult(if (isAdmin) UserRole.ADMIN else UserRole.USER)
-        }
-        .addOnFailureListener {
-            Log.d("MyLog", "Не получилось получить данные, какая-то ошибка")
-        }
 }
 
 @Preview(showBackground = true)

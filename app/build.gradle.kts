@@ -54,9 +54,6 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.navigation)
 
-    //Для гистограмы
-    implementation(libs.ycharts)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
