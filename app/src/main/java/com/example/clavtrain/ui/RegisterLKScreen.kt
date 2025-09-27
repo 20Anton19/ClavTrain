@@ -14,6 +14,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,13 +26,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.clavtrain.ui.theme.ClavTrainTheme
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun RegisterLKScreen(onContinueClick: () -> Unit) {
+fun RegisterLKScreen(
+    onContinueClick: () -> Unit,
+    viewModel: RegisterLKViewModel = koinViewModel()
+) {
     var firstName by remember { mutableStateOf("") }
     var middleName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -39,7 +42,13 @@ fun RegisterLKScreen(onContinueClick: () -> Unit) {
     var password by remember { mutableStateOf("") }
     var repeatPassword by remember { mutableStateOf("") }
 
-    val auth = Firebase.auth
+    val registerState by viewModel.registerState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(registerState) {
+        if (registerState is RegisterLKViewModel.RegisterState.Success) {
+            onContinueClick()
+        }
+    }
     
     Box(
         modifier = Modifier
@@ -126,7 +135,7 @@ fun RegisterLKScreen(onContinueClick: () -> Unit) {
                 onClick = //onContinueClick
                     {
                         Log.d("MyRagisterCheck", "Кликнул")
-                        signUp(auth, email, password, onContinueClick)
+                        viewModel.signUp(email, password)
                     },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -147,19 +156,4 @@ fun RegisterLKScreen(onContinueClick: () -> Unit) {
 @Composable
 private fun RegisterLKScreenPreview() {
     ClavTrainTheme { RegisterLKScreen(onContinueClick = {}) }
-}
-
-private fun signUp(auth: FirebaseAuth, email: String, pass: String, onContinueClick: () -> Unit) {
-    Log.d("MyRagisterCheck", "Попал в signUp")
-    auth.createUserWithEmailAndPassword(email, pass)
-        .addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                Log.d(TAG, "createUserWithEmail:success")
-                //val user = auth.currentUser
-                onContinueClick()
-            } else {
-                // If sign in fails, display a message to the user.
-                Log.w(TAG, "createUserWithEmail:failure", task.exception)
-            }
-        }
 }
