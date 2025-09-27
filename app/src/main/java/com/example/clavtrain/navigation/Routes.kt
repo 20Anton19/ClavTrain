@@ -16,6 +16,7 @@ sealed class Route(val path: String) {
 
     data object UserExercises : Route("user_exercises")
     data object UserTraining : Route("user_training")
+    data object UserExerciseStatistic : Route("user_exercise_statistic")
     
     // Admin routes
     data object AdminMain : Route("admin_main")

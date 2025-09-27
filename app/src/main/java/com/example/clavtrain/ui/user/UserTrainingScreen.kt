@@ -190,7 +190,8 @@ fun UserTrainingScreen(
                     }
 
                     if ((newText.length == fullText.length) and tempIsCorrect) {
-                        isCompleted = true
+                        isCompleted = true // а зачем мне оно если я ухожу все равно
+                        onViewStatistics()
                     }
                 }
 

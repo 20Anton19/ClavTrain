@@ -7,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.clavtrain.ui.user.AboutDevelopersScreen
 import com.example.clavtrain.ui.user.InfoScreen
 import com.example.clavtrain.ui.user.UserDifficultyScreen
+import com.example.clavtrain.ui.user.UserExerciseStatisticScreen
 import com.example.clavtrain.ui.user.UserExercisesScreen
 import com.example.clavtrain.ui.user.UserLKScreen
 import com.example.clavtrain.ui.user.UserMenuScreen
@@ -36,36 +37,45 @@ fun UserNav(onExitApp: () -> Unit) {
                 }
             )
         }
-        composable(Route.UserDifficulty.path) {
-            UserDifficultyScreen(
-                onViewExcercises = {
-                    navController.navigate(Route.UserExercises.path)
-                },
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
-        }
-        composable(Route.UserExercises.path) {
-            UserExercisesScreen(
-                onStartTraining = {
-                    navController.navigate(Route.UserTraining.path)
-                },
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
-        }
-        composable(Route.UserTraining.path) {
-            UserTrainingScreen(
-                onViewStatistics = {
-                    navController.navigate(Route.UserExercises.path)
-                },
-                onBackClick = {
-                    navController.popBackStack()
-                }
-            )
-        }
+            composable(Route.UserDifficulty.path) {
+                UserDifficultyScreen(
+                    onViewExcercises = {
+                        navController.navigate(Route.UserExercises.path)
+                    },
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable(Route.UserExercises.path) {
+                UserExercisesScreen(
+                    onStartTraining = {
+                        navController.navigate(Route.UserTraining.path)
+                    },
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable(Route.UserTraining.path) {
+                UserTrainingScreen(
+                    onViewStatistics = {
+                        navController.navigate(Route.UserExerciseStatistic.path)
+                    },
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+            composable(Route.UserExerciseStatistic.path) {
+                UserExerciseStatisticScreen(
+                    onViewMenu = {
+                        navController.navigate(Route.UserMenu.path) {
+                            popUpTo(Route.UserMenu.path) { inclusive = true }
+                        }
+                    }
+                )
+            }
         composable(Route.UserLK.path) {
             UserLKScreen()
         }
