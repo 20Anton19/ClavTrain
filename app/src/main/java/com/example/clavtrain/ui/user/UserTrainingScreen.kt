@@ -72,7 +72,7 @@ fun UserTrainingScreen(
     //Проверка БД
     val viewModel: DataBaseViewModel = koinViewModel()
     LaunchedEffect(isCompleted) {
-        viewModel.insertExercise(Exercise(10,"Упражнение1", 20))
+        //viewModel.insertExercise(Exercise(10,"Упражнение1", 20))
     }
 
     Column(
