@@ -37,30 +37,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.clavtrain.data.db.DataBaseViewModel
 import com.example.clavtrain.data.db.Exercise
+import com.example.clavtrain.ui.RegisterLKViewModel
 import com.example.clavtrain.ui.theme.ClavTrainTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserTrainingScreen(
     onViewStatistics: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    dataBaseViewModel: DataBaseViewModel = koinViewModel(),
+    userTrainingViewModel: UserTrainingViewModel = koinViewModel()
 ) {
-    var presentLength by remember { mutableIntStateOf(0) }
-    var presentMistakes by remember { mutableIntStateOf(0) }
-    var presentTime by remember { mutableLongStateOf(0L) }
+    val userInput by userTrainingViewModel.userInput.collectAsStateWithLifecycle()
+    val isCompleted by userTrainingViewModel.isCompleted.collectAsStateWithLifecycle()
+    val isCorrect by userTrainingViewModel.isCorrect.collectAsStateWithLifecycle()
+    val presentLength by userTrainingViewModel.presentLength.collectAsStateWithLifecycle()
+    val presentMistakes by userTrainingViewModel.presentMistakes.collectAsStateWithLifecycle()
+    val presentTime by userTrainingViewModel.presentTime.collectAsStateWithLifecycle()
+    val remainingText by userTrainingViewModel.remainingText.collectAsStateWithLifecycle()
 
-
-    var userInput by remember { mutableStateOf("") }
-    val fullText = "adfg"
-
-    val correctPart = fullText.take(userInput.length)
-    val isCorrect = correctPart == userInput
-    Log.d("IsCorrect", "correctPart: $correctPart, userInput: $userInput, isCorrect: $isCorrect")
-
-    var isCompleted by remember { mutableStateOf(false) }
-    val remainingText = fullText.drop(userInput.length)
 
     // Фокус для клавиатуры
     val focusRequester = remember { FocusRequester() }
@@ -70,9 +68,11 @@ fun UserTrainingScreen(
     }
 
     //Проверка БД
-    val viewModel: DataBaseViewModel = koinViewModel()
     LaunchedEffect(isCompleted) {
-        //viewModel.insertExercise(Exercise(10,"Упражнение1", 20))
+        if (isCompleted) {
+            dataBaseViewModel.insertExercise(Exercise(17,"Упражнение1", 20))
+            onViewStatistics()
+        }
     }
 
     Column(
@@ -161,21 +161,10 @@ fun UserTrainingScreen(
             fontSize = 24.sp
         )
         Text(
-            text = isCompleted.toString(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            textAlign = TextAlign.Center,
-            fontSize = 24.sp
-        )
-        // Введенный текст (черный)
-        Text(
             text = userInput,
             color = if (isCorrect) Color.Black else Color.Red,
             fontSize = 24.sp
         )
-
-        // Подсказка (серый) - уменьшается по мере ввода
         Text(
             text = remainingText,
             color = Color.Gray,
@@ -186,24 +175,7 @@ fun UserTrainingScreen(
         BasicTextField(
             value = userInput,
             onValueChange = { newText ->
-                if (newText.length <= fullText.length) {
-                    val tempIsCorrect = fullText.take(newText.length) == newText
-                    val isAddingCharacter = newText.length > userInput.length
-
-                    userInput = newText
-                    presentLength = newText.length
-
-                    if (!tempIsCorrect and isAddingCharacter) {
-                        presentMistakes+=1
-                        Log.d("IsCorrect", "Не корректно, ошибок: $presentMistakes")
-                    }
-
-                    if ((newText.length == fullText.length) and tempIsCorrect) {
-                        isCompleted = true // а зачем мне оно если я ухожу все равно
-                        onViewStatistics()
-                    }
-                }
-
+                userTrainingViewModel.everyTextChange(newText)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -220,14 +192,6 @@ fun UserTrainingScreen(
         ) {
             Text("Выйти")
         }
-//        Text(
-//            text = mainAlg(50,10,10),
-//            modifier = Modifier
-//                .width(300.dp)
-//                .padding(vertical = 24.dp),
-//            textAlign = TextAlign.Center,
-//            fontSize = 24.sp
-//        )
     }
 }
 

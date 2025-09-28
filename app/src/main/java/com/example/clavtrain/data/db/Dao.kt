@@ -11,4 +11,7 @@ interface Dao {
 
     @Delete()
     suspend fun deleteExercise(exercise: Exercise)
+
+    @Upsert()
+    suspend fun insertExerciseStatistic(exerciseStatistic: ExerciseStatistic)
 }

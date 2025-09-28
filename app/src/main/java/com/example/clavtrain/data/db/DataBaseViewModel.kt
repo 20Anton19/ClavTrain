@@ -14,4 +14,8 @@ class DataBaseViewModel(
     suspend fun deleteExercise(exercise: Exercise) {
         dao.deleteExercise(exercise)
     }
+
+    suspend fun insertExerciseStatistic(exerciseStatistic: ExerciseStatistic) {
+        dao.insertExerciseStatistic(exerciseStatistic)
+    }
 }
