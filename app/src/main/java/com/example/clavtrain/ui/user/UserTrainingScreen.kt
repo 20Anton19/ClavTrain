@@ -37,7 +37,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.clavtrain.data.db.DataBaseViewModel
+import com.example.clavtrain.data.db.Exercise
 import com.example.clavtrain.ui.theme.ClavTrainTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserTrainingScreen(
@@ -64,6 +67,12 @@ fun UserTrainingScreen(
     // Автофокус при открытии
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+
+    //Проверка БД
+    val viewModel: DataBaseViewModel = koinViewModel()
+    LaunchedEffect(isCompleted) {
+        viewModel.insertExercise(Exercise(10,"Упражнение1", 20))
     }
 
     Column(

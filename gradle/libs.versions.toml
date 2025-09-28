@@ -15,10 +15,12 @@ bomVersion = "34.3.0"
 runtime = "1.9.1"
 
 koin-bom = "4.1.1"
-ksp = "2.0"
+ksp = "2.1.20-2.0.0"
 
-ychartsVersion = "2.1.0"
 uiGraphics = "1.9.2"
+
+roomRuntime = "2.8.1"
+roomCompiler = "2.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -54,6 +56,11 @@ koin-compose-navigation = { module = "io.insert-koin:koin-androidx-compose-navig
 
 #Гистограмы
 ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "uiGraphics" }
+
+#Room
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
