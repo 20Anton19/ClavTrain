@@ -41,6 +41,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.clavtrain.data.db.DataBaseViewModel
 import com.example.clavtrain.data.db.Exercise
+import com.example.clavtrain.data.db.ExerciseStatistic
 import com.example.clavtrain.ui.RegisterLKViewModel
 import com.example.clavtrain.ui.theme.ClavTrainTheme
 import org.koin.androidx.compose.koinViewModel
@@ -81,7 +82,18 @@ fun UserTrainingScreen(
     //Проверка БД
     LaunchedEffect(isCompleted) {
         if (isCompleted) {
-            onViewStatistics()
+            // Создаем и сохраняем статистику
+            val statistic = ExerciseStatistic(
+                exerciseId = exerciseId,
+                mistakes = presentMistakes,
+                timeSpent = presentTime,
+                avgTime = if (presentLength > 0) presentTime / presentLength else 0L,
+                isSuccessful = true,
+                completedAt = System.currentTimeMillis()
+            )
+
+            dataBaseViewModel.saveStatistic(statistic)  // ← сохраняем во ViewModel
+            onViewStatistics()  // ← переходим на экран статистики
         }
     }
 
@@ -154,6 +166,14 @@ fun UserTrainingScreen(
             ) {
                 Text(
                     text = "Время",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 5.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 20.sp
+                )
+                Text(
+                    text = "%.1f".format(presentTime.toDouble() / 1000),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 5.dp),

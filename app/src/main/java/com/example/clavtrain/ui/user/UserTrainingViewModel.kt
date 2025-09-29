@@ -2,10 +2,15 @@ package com.example.clavtrain.ui.user
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.clavtrain.ui.RegisterLKViewModel.RegisterState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.NonCancellable.isActive
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class UserTrainingViewModel(): ViewModel() {
     private var _fullText = ""
@@ -24,18 +29,29 @@ class UserTrainingViewModel(): ViewModel() {
     private val _presentLength = MutableStateFlow<Int>(0)
     val presentLength: StateFlow<Int> = _presentLength.asStateFlow()
 
-    private val _presentTime = MutableStateFlow<Long>(0L)
-    val presentTime: StateFlow<Long> = _presentTime.asStateFlow()
-
     private val _remainingText = MutableStateFlow<String>(_fullText)
     val remainingText: StateFlow<String> = _remainingText.asStateFlow()
 
-    // Устанавливаем текст упражнения
+    // Добавляем таймер
+    private var startTime: Long = 0L
+    private val _presentTime = MutableStateFlow<Long>(0L)
+    val presentTime: StateFlow<Long> = _presentTime.asStateFlow()
+    private var timerJob: Job? = null
     fun setExerciseText(text: String) {
         _fullText = text
         _remainingText.value = _fullText
+        startTimer()
     }
 
+    private fun startTimer() {
+        startTime = System.currentTimeMillis()
+        timerJob = viewModelScope.launch {
+            while (isActive && !_isCompleted.value) {
+                _presentTime.value = System.currentTimeMillis() - startTime
+                delay(100) // Обновляем каждые 100ms
+            }
+        }
+    }
 
     fun everyTextChange(
         newText: String
@@ -53,6 +69,7 @@ class UserTrainingViewModel(): ViewModel() {
 
             if ((newText.length == _fullText.length) and tempIsCorrect) {
                 _isCompleted.value = true
+                timerJob?.cancel()
             }
             _remainingText.value = _fullText.drop(userInput.value.length)
             _isCorrect.value  = tempIsCorrect

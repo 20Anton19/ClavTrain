@@ -7,7 +7,8 @@ import androidx.room.PrimaryKey
 data class ExerciseStatistic(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
-    val mistakes: String,
+    val exerciseId: Int,
+    val mistakes: Int,
     val timeSpent: Long,
     val avgTime: Long,
     val isSuccessful: Boolean,

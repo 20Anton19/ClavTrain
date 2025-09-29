@@ -50,4 +50,16 @@ class DataBaseViewModel(
     fun getExerciseById(exerciseId: Int): Flow<Exercise?> {
         return dao.getExerciseById(exerciseId)
     }
+
+    // Для статистики
+    private val _lastStatistic = MutableStateFlow<ExerciseStatistic?>(null)
+    val lastStatistic: StateFlow<ExerciseStatistic?> = _lastStatistic.asStateFlow()
+
+    fun saveStatistic(statistic: ExerciseStatistic) {
+        _lastStatistic.value = statistic
+    }
+
+    fun clearStatistic() {
+        _lastStatistic.value = null
+    }
 }

@@ -29,10 +29,18 @@ import androidx.compose.ui.unit.sp
 import com.example.clavtrain.ui.theme.ClavTrainTheme
 
 import android.graphics.Paint
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
+import com.example.clavtrain.data.db.DataBaseViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun BarChart(
@@ -167,7 +175,8 @@ data class BarData(
 )
 @Composable
 fun UserExerciseStatisticScreen(
-    onViewMenu: () -> Unit
+    onViewMenu: () -> Unit,
+    dataBaseViewModel: DataBaseViewModel = koinViewModel()
 ) {
     val dataList = listOf<BarData>(
         BarData(10f, "авава"),
@@ -176,61 +185,80 @@ fun UserExerciseStatisticScreen(
         BarData(10f, "авава"),
         BarData(10f, "авава")
     )
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Статистика по упражнению",
-            //style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            //fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            fontSize = 24.sp
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        LazyColumn {
-            items(3) { item ->
-                Card(
-                    modifier = Modifier
-                        .padding(vertical = 4.dp)
-                        .width(250.dp)
-                        .height(50.dp),
-                    colors = CardDefaults.cardColors(containerColor = Color(0xffe6d9e8))
-                ) {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Кол. ошибок",
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                            fontSize = 20.sp
-                        )
-                    }
 
+    val statistic by dataBaseViewModel.lastStatistic.collectAsState()
+    // Показываем загрузку если статистика еще не пришла
+    if (statistic == null) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+            Text("Загрузка статистики...", modifier = Modifier.padding(16.dp))
+        }
+    } else {
+        val statisticListInfo = listOf(
+            "Время ${"%.2f".format(statistic!!.timeSpent.toDouble() / 1000)} сек",
+            "Ошибки ${statistic!!.mistakes}",
+            "Среднее время нажатия ${"%.2f".format(statistic!!.avgTime.toDouble())} мс"
+            )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Статистика по упражнению",
+                //style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                //fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                fontSize = 24.sp
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            LazyColumn {
+                items(statisticListInfo) { item ->
+                    Card(
+                        modifier = Modifier
+                            .padding(vertical = 4.dp)
+                            .width(250.dp)
+                            .height(50.dp),
+                        colors = CardDefaults.cardColors(containerColor = Color(0xffe6d9e8))
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = item,
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                fontSize = 15.sp
+                            )
+                        }
+
+                    }
                 }
             }
-        }
-        Spacer(modifier = Modifier.weight(0.5f))
-        BarChart(
-            data = dataList,
-            modifier = Modifier
-        )
-        Spacer(modifier = Modifier.weight(0.5f))
-        Button(
-            onClick = onViewMenu,
-            modifier = Modifier
-                .width(250.dp)
-                .padding(vertical = 8.dp)
-        ) {
-            Text("Выйти")
+            Spacer(modifier = Modifier.weight(0.5f))
+            BarChart(
+                data = dataList,
+                modifier = Modifier
+            )
+            Spacer(modifier = Modifier.weight(0.5f))
+            Button(
+                onClick = onViewMenu,
+                modifier = Modifier
+                    .width(250.dp)
+                    .padding(vertical = 8.dp)
+            ) {
+                Text("Выйти")
+            }
         }
     }
 }
