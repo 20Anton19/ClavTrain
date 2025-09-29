@@ -33,6 +33,10 @@ interface Dao {
     @Query("SELECT * FROM Exercise WHERE difficultyId = :difficultyId")
     fun getExercisesByDifficultyId(difficultyId: Int): Flow<List<Exercise>>
 
+    //Получение упражения по id
+    @Query("SELECT * FROM Exercise WHERE id = :exerciseId")
+    fun getExerciseById(exerciseId: Int): Flow<Exercise?>
+
     @Update
     suspend fun updateDifficultyLevel(difficultyLevel: DifficultyLevel)
 

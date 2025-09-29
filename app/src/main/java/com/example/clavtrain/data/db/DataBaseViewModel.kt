@@ -46,4 +46,8 @@ class DataBaseViewModel(
     fun getExercisesByDifficultyId(difficultyId: Int): Flow<List<Exercise>> {
         return dao.getExercisesByDifficultyId(difficultyId)
     }
+
+    fun getExerciseById(exerciseId: Int): Flow<Exercise?> {
+        return dao.getExerciseById(exerciseId)
+    }
 }

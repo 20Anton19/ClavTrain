@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -60,6 +61,15 @@ fun UserTrainingScreen(
     val presentTime by userTrainingViewModel.presentTime.collectAsStateWithLifecycle()
     val remainingText by userTrainingViewModel.remainingText.collectAsStateWithLifecycle()
 
+    // Загружаем упражнение на экране и передаем в ViewModel
+    LaunchedEffect(exerciseId) {
+        dataBaseViewModel.getExerciseById(exerciseId).collect { exercise ->
+            exercise?.let {
+                userTrainingViewModel.setExerciseText(it.text)
+            }
+        }
+    }
+
 
     // Фокус для клавиатуры
     val focusRequester = remember { FocusRequester() }
@@ -71,7 +81,6 @@ fun UserTrainingScreen(
     //Проверка БД
     LaunchedEffect(isCompleted) {
         if (isCompleted) {
-            //dataBaseViewModel.insertExercise(Exercise(17,"Упражнение1", 20))
             onViewStatistics()
         }
     }
@@ -161,29 +170,34 @@ fun UserTrainingScreen(
             textAlign = TextAlign.Center,
             fontSize = 24.sp
         )
-        Text(
-            text = userInput,
-            color = if (isCorrect) Color.Black else Color.Red,
-            fontSize = 24.sp
-        )
-        Text(
-            text = remainingText,
-            color = Color.Gray,
-            fontSize = 24.sp
-        )
+        // Показываем индикатор загрузки если текст еще не загружен
+        if (remainingText.isEmpty()) {
+            CircularProgressIndicator()
+        } else {
+            Text(
+                text = userInput,
+                color = if (isCorrect) Color.Black else Color.Red,
+                fontSize = 24.sp
+            )
+            Text(
+                text = remainingText,
+                color = Color.Gray,
+                fontSize = 24.sp
+            )
 
-        // Скрытое поле ввода
-        BasicTextField(
-            value = userInput,
-            onValueChange = { newText ->
-                userTrainingViewModel.everyTextChange(newText)
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(100.dp)
-                .alpha(0.01f)
-                .focusRequester(focusRequester)
-        )
+            // Скрытое поле ввода
+            BasicTextField(
+                value = userInput,
+                onValueChange = { newText ->
+                    userTrainingViewModel.everyTextChange(newText)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .alpha(0.01f)
+                    .focusRequester(focusRequester)
+            )
+        }
         Spacer(modifier = Modifier.weight(1f))
         Button(
             onClick = onBackClick,
