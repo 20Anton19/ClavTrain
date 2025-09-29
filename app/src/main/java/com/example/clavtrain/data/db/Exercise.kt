@@ -8,5 +8,7 @@ data class Exercise(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
     val name: String,
-    val difficultyId: Int
+    val difficultyId: Int,
+    val createdAt: Long,
+    val text: String
 )

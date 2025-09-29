@@ -17,7 +17,9 @@ sealed class Route(val path: String) {
     object UserExercises : Route("user_exercises/{levelIndex}") {  // ← добавляем параметр
         fun createRoute(levelIndex: Int) = "user_exercises/$levelIndex"
     }
-    data object UserTraining : Route("user_training")
+    object UserTraining : Route("user_training/{exerciseId}") {  // ← добавляем параметр
+        fun createRoute(exerciseId: Int) = "user_training/$exerciseId"
+    }
     data object UserExerciseStatistic : Route("user_exercise_statistic")
     
     // Admin routes

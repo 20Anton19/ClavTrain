@@ -14,6 +14,11 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,17 +27,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.clavtrain.data.db.DataBaseViewModel
+import com.example.clavtrain.data.db.Exercise
 import com.example.clavtrain.ui.theme.ClavTrainTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserExercisesScreen(
     levelIndex: Int,  // ← получаем индекс
-    onStartTraining: () -> Unit,
+    onStartTraining: (Int) -> Unit,
     onBackClick: () -> Unit,
     dataBaseViewModel: DataBaseViewModel = koinViewModel()
 ) {
-    val exercisesAmount = 3// Здесь будет загрузка из бд и длина массива мб
+    // levelIndex совпадает с id уровня сложности (1,2,3,4,5)
+    val difficultyId = levelIndex + 1  // 0,1,2,3,4 → 1,2,3,4,5
+
+    var exercises by remember { mutableStateOf<List<Exercise>>(emptyList()) }
+
+    LaunchedEffect(difficultyId) {
+        dataBaseViewModel.getExercisesByDifficultyId(difficultyId)
+            .collect { exercises = it }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -40,7 +54,7 @@ fun UserExercisesScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Список упражнений $levelIndex",
+            text = "Список упражнений",
             //style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier
                 .fillMaxWidth()
@@ -50,9 +64,9 @@ fun UserExercisesScreen(
             fontSize = 24.sp
         )
         LazyColumn {
-            items(exercisesAmount) { item ->
+            items(exercises) { exercise ->
                 Button(
-                    onClick = onStartTraining,
+                    onClick = {onStartTraining(exercise.id ?: 0)},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xffe6d9e8),
                         contentColor = Color.Black
@@ -64,7 +78,7 @@ fun UserExercisesScreen(
                         .height(50.dp)
                 ) {
                     Text(
-                        text = "Упражнение ${item+1}",
+                        text = exercise.name,
                         modifier = Modifier.fillMaxWidth(),
                         fontSize = 17.sp,
                         textAlign = TextAlign.Start

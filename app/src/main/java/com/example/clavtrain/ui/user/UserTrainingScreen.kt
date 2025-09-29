@@ -46,6 +46,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserTrainingScreen(
+    exerciseId: Int,
     onViewStatistics: () -> Unit,
     onBackClick: () -> Unit,
     dataBaseViewModel: DataBaseViewModel = koinViewModel(),
@@ -70,7 +71,7 @@ fun UserTrainingScreen(
     //Проверка БД
     LaunchedEffect(isCompleted) {
         if (isCompleted) {
-            dataBaseViewModel.insertExercise(Exercise(17,"Упражнение1", 20))
+            //dataBaseViewModel.insertExercise(Exercise(17,"Упражнение1", 20))
             onViewStatistics()
         }
     }
@@ -195,27 +196,27 @@ fun UserTrainingScreen(
     }
 }
 
-
-private fun mainAlg(
-    simbolsAmount: Int,
-    maxMistakes: Int,
-    maxPressTime: Long
-): String {
-    var text = "";
-    repeat (simbolsAmount) {
-        val randomLetter = ('А'..'Я').random()
-        text+=randomLetter
-    }
-    return text
-}
-
-
+// Это жолжно быть не зесь а у админа в создании упражнения
+//private fun mainAlg(
+//    simbolsAmount: Int,
+//    maxMistakes: Int,
+//    maxPressTime: Long
+//): String {
+//    var text = "";
+//    repeat (simbolsAmount) {
+//        val randomLetter = ('А'..'Я').random()
+//        text+=randomLetter
+//    }
+//    return text
+//}
 
 
 
 
-@Preview(showBackground = true)
-@Composable
-private fun UserTrainingScreenPreview() {
-    ClavTrainTheme { UserTrainingScreen(onViewStatistics = {}, onBackClick = {}) }
-}
+
+
+//@Preview(showBackground = true)
+//@Composable
+//private fun UserTrainingScreenPreview() {
+//    ClavTrainTheme { UserTrainingScreen(onViewStatistics = {}, onBackClick = {}) }
+//}

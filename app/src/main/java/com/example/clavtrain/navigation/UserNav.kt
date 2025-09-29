@@ -59,16 +59,21 @@ fun UserNav(onExitApp: () -> Unit) {
 
                 UserExercisesScreen(
                     levelIndex = levelIndex,  // ← передаем индекс
-                    onStartTraining = {
-                        navController.navigate(Route.UserTraining.path)
+                    onStartTraining = { exerciseId ->
+                        navController.navigate(Route.UserTraining.createRoute(exerciseId))
                     },
                     onBackClick = {
                         navController.popBackStack()
                     }
                 )
             }
-            composable(Route.UserTraining.path) {
+            composable(
+                route = Route.UserTraining.path,
+                arguments = listOf(navArgument("exerciseId") { type = NavType.IntType })
+            ) { backStackEntry ->
+                val exerciseId = backStackEntry.arguments?.getInt("exerciseId") ?: 0
                 UserTrainingScreen(
+                    exerciseId = exerciseId,
                     onViewStatistics = {
                         navController.navigate(Route.UserExerciseStatistic.path)
                     },
