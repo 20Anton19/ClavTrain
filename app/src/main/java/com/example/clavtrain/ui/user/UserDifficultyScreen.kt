@@ -14,6 +14,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -23,14 +25,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.clavtrain.data.db.DataBaseViewModel
 import com.example.clavtrain.ui.theme.ClavTrainTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserDifficultyScreen(
-    onViewExcercises: () -> Unit,
-    onBackClick: () -> Unit
+    onViewExcercises: (Int) -> Unit,
+    onBackClick: () -> Unit,
+    dataBaseViewModel: DataBaseViewModel = koinViewModel()
 ) {
-    val difficulties = listOf("Легко", "Нормально", "Сложно", "Очень сложно", "Профи")
+    val levels by dataBaseViewModel.difficultyLevels.collectAsState()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -48,10 +53,13 @@ fun UserDifficultyScreen(
             fontSize = 24.sp
         )
         LazyColumn {
-            items(difficulties) { difficulty ->
+            items(levels) { level ->
                 Button(
-                    onClick = onViewExcercises,
-                    colors = ButtonDefaults.buttonColors(
+                    onClick = {
+                        val index = levels.indexOf(level)
+                        onViewExcercises(index)  // ← передаем позицию в списке
+                    },
+                        colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xffe6d9e8),
                         contentColor = Color.Black
                     ),
@@ -62,7 +70,7 @@ fun UserDifficultyScreen(
                         .height(50.dp)
                 ) {
                     Text(
-                        text = difficulty,
+                        text = level.name,
                         modifier = Modifier.fillMaxWidth(),
                         fontSize = 17.sp,
                         textAlign = TextAlign.Start

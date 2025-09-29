@@ -21,12 +21,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.clavtrain.data.db.DataBaseViewModel
 import com.example.clavtrain.ui.theme.ClavTrainTheme
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserExercisesScreen(
+    levelIndex: Int,  // ← получаем индекс
     onStartTraining: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    dataBaseViewModel: DataBaseViewModel = koinViewModel()
 ) {
     val exercisesAmount = 3// Здесь будет загрузка из бд и длина массива мб
     Column(
@@ -36,7 +40,7 @@ fun UserExercisesScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Список упражнений",
+            text = "Список упражнений $levelIndex",
             //style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier
                 .fillMaxWidth()
@@ -80,8 +84,8 @@ fun UserExercisesScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-private fun UserExercisesPreview() {
-    ClavTrainTheme { UserExercisesScreen(onStartTraining = {}, onBackClick = {}) }
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun UserExercisesPreview() {
+//    ClavTrainTheme { UserExercisesScreen(onStartTraining = {}, onBackClick = {}) }
+//}

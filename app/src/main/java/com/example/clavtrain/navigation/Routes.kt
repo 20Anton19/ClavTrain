@@ -14,7 +14,9 @@ sealed class Route(val path: String) {
     data object Info : Route("info")
     data object AboutDevelopers : Route("about_developers")
 
-    data object UserExercises : Route("user_exercises")
+    object UserExercises : Route("user_exercises/{levelIndex}") {  // ← добавляем параметр
+        fun createRoute(levelIndex: Int) = "user_exercises/$levelIndex"
+    }
     data object UserTraining : Route("user_training")
     data object UserExerciseStatistic : Route("user_exercise_statistic")
     

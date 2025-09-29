@@ -25,9 +25,9 @@ fun createDatabase(application: Application): DataBase {
 
 val mainModule = module {
     single { createDatabase(get()) }
+    single<DataBaseViewModel> { DataBaseViewModel(get()) } // ← ОДНА на всё приложение
     viewModelOf(::MainViewModel)
     viewModelOf(::EntryLKViewModel)
     viewModelOf(::RegisterLKViewModel)
-    viewModelOf(::DataBaseViewModel)
     viewModelOf(::UserTrainingViewModel)
 }

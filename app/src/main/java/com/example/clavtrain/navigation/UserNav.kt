@@ -1,9 +1,11 @@
 package com.example.clavtrain.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.clavtrain.ui.user.AboutDevelopersScreen
 import com.example.clavtrain.ui.user.InfoScreen
 import com.example.clavtrain.ui.user.UserDifficultyScreen
@@ -39,16 +41,24 @@ fun UserNav(onExitApp: () -> Unit) {
         }
             composable(Route.UserDifficulty.path) {
                 UserDifficultyScreen(
-                    onViewExcercises = {
-                        navController.navigate(Route.UserExercises.path)
+                    onViewExcercises = { levelIndex ->
+                        navController.navigate(Route.UserExercises.createRoute(levelIndex))
                     },
                     onBackClick = {
                         navController.popBackStack()
                     }
                 )
             }
-            composable(Route.UserExercises.path) {
+            composable(
+                route = Route.UserExercises.path,  // "user_exercises/{levelIndex}"
+                arguments = listOf(
+                    navArgument("levelIndex") { type = NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val levelIndex = backStackEntry.arguments?.getInt("levelIndex") ?: 0
+
                 UserExercisesScreen(
+                    levelIndex = levelIndex,  // ← передаем индекс
                     onStartTraining = {
                         navController.navigate(Route.UserTraining.path)
                     },

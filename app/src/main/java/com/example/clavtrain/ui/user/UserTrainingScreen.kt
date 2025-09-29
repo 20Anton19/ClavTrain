@@ -199,7 +199,7 @@ fun UserTrainingScreen(
 private fun mainAlg(
     simbolsAmount: Int,
     maxMistakes: Int,
-    maxPressTime: Int
+    maxPressTime: Long
 ): String {
     var text = "";
     repeat (simbolsAmount) {

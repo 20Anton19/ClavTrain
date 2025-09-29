@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.clavtrain.data.UserRole
+import com.example.clavtrain.data.db.DataBaseViewModel
+import com.example.clavtrain.data.db.DifficultyLevel
 import com.example.clavtrain.navigation.AdminNav
 import com.example.clavtrain.navigation.UserNav
 import com.example.clavtrain.ui.theme.ClavTrainTheme
@@ -35,8 +37,17 @@ import org.koin.androidx.compose.koinViewModel
 fun MainScreen(
     onLoginClick: () -> Unit,
     onRoleDetermined: (UserRole?) -> Unit,  // ← Колбэк для определения роли
-    viewModel: MainViewModel = koinViewModel()
+    viewModel: MainViewModel = koinViewModel(),
+    dataBaseViewModel: DataBaseViewModel = koinViewModel()
 ) {
+//    LaunchedEffect(Unit) {
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(1,"1", 1,1,1))
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(2,"2", 2,2,2))
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(3,"3", 3,3,3))
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(4,"4", 4,4,4))
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(5,"5", 5,5,5))
+//    }
+
     val userRole by viewModel.userRole.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {

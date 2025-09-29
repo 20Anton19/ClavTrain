@@ -2,7 +2,10 @@ package com.example.clavtrain.data.db
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Query
+import androidx.room.Update
 import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface Dao {
@@ -14,4 +17,17 @@ interface Dao {
 
     @Upsert()
     suspend fun insertExerciseStatistic(exerciseStatistic: ExerciseStatistic)
+
+    @Upsert()
+    suspend fun insertDifficultyLevel(difficultyLevel: DifficultyLevel)
+
+    @Query("SELECT * FROM DifficultyLevel ORDER BY id")
+    fun getAllDifficultyLevels(): Flow<List<DifficultyLevel>>
+
+    @Query("SELECT * FROM DifficultyLevel WHERE id = :id")
+    fun getDifficultyLevelById(id: Int): Flow<DifficultyLevel?>
+
+    @Update
+    suspend fun updateDifficultyLevel(difficultyLevel: DifficultyLevel)
 }
+
