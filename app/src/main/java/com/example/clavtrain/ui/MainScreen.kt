@@ -62,7 +62,6 @@ fun MainScreen(
 //        createdAt = currentTime,
 //        text = "важдпрлывапдлтвпморэщшфоьхжз"
 //    ))
-//
 //    dataBaseViewModel.insertExercise(Exercise(
 //        name = "Упражнение 3",
 //        difficultyId = 2,
@@ -114,7 +113,8 @@ fun MainScreen(
 //        createdAt = currentTime,
 //        text = "флдыжаопэдржлфыаэдлвапдэыфловапжрлыфважлвапжыуфдлвэждплыажэдл"
 //        )
-//    ) }
+//    )
+//    }
 
     val userRole by viewModel.userRole.collectAsStateWithLifecycle()
 

@@ -135,7 +135,7 @@ fun RegisterLKScreen(
                 onClick = //onContinueClick
                     {
                         Log.d("MyRagisterCheck", "Кликнул")
-                        viewModel.signUp(email, password)
+                        viewModel.signUp(email, password, firstName, middleName, lastName)
                     },
                 modifier = Modifier
                     .fillMaxWidth()

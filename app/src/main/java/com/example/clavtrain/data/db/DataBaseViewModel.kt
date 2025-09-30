@@ -1,19 +1,26 @@
 package com.example.clavtrain.data.db
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class DataBaseViewModel(
     private val database: DataBase
 ): ViewModel() {
     private val dao = database.dao
+    private val auth = Firebase.auth
 
     init {
+        loadCurrentUser()
         loadAllDifficultyLevels()
     }
     private val _difficultyLevels = MutableStateFlow<List<DifficultyLevel>>(emptyList())
@@ -62,5 +69,84 @@ class DataBaseViewModel(
 
     fun getStatisticsByExerciseId(exerciseId: Int): Flow<List<ExerciseStatistic>> {
         return dao.getStatisticsByExerciseId(exerciseId)
+    }
+
+
+
+    //FIRESTORE
+    // State для текущего пользователя
+    private val _currentUser = MutableStateFlow<User?>(null)
+    val currentUser: StateFlow<User?> = _currentUser.asStateFlow()
+
+    private fun loadCurrentUser() {
+        val firebaseUser = auth.currentUser
+        if (firebaseUser != null) {
+            // Пользователь авторизован, загружаем его данные
+            fetchUserFromFirestore(firebaseUser.uid)
+        } else {
+            // Можно обработать случай когда пользователь не авторизован
+            Log.e("DataBaseViewModel", "No authenticated user found")
+        }
+    }
+
+    private fun fetchUserFromFirestore(userId: String) {
+        viewModelScope.launch {
+            try {
+                val userDoc = Firebase.firestore.collection("users")
+                    .document(userId)
+                    .get()
+                    .await()
+                if (userDoc.exists()) {
+                    val data = userDoc.data!!
+                    val user = User(
+                        id = userId,
+                        firstName = data["firstName"] as? String ?: "",
+                        middleName = data["middleName"] as? String ?: "",
+                        lastName = data["lastName"] as? String ?: "",
+                        email = data["email"] as? String ?: "",
+                        password = data["password"] as? String ?: ""
+                    )
+                    _currentUser.value = user
+                } else {
+                    Log.e("DataBaseViewModel", "User document not found in Firestore")
+                }
+            } catch (e: Exception) {
+                Log.e("DataBaseViewModel", "Error fetching user from Firestore", e)
+            }
+        }
+    }
+
+    suspend fun saveStatisticToFirebase(statistic: ExerciseStatistic) {
+        Log.d("FirestoreSync", "Вызываю")
+        syncStatisticToFirestore(statistic)
+        Log.d("FirestoreSync", "Выполнилась")
+    }
+
+    private suspend fun syncStatisticToFirestore(statistic: ExerciseStatistic) {
+        try {
+            Log.d("FirestoreSync", "Saving to local DB")
+            val statisticMap = mapOf(
+                "exerciseId" to statistic.exerciseId,
+                "userId" to statistic.userId,
+                "mistakes" to statistic.mistakes,
+                "timeSpent" to statistic.timeSpent,
+                "avgTime" to statistic.avgTime,
+                "isSuccessful" to statistic.isSuccessful,
+                "completedAt" to statistic.completedAt,
+                "localId" to statistic.id, // сохраняем локальный ID на всякий случай
+                "syncedAt" to System.currentTimeMillis()
+            )
+            Log.d("FirestoreSync", "Syncing to Firestore")
+            val documentId = "${statistic.userId}_${statistic.exerciseId}_${statistic.completedAt}"
+
+            Firebase.firestore.collection("statistics")
+                .document(documentId)
+                .set(statisticMap)
+                .await()
+            Log.d("FirestoreSync", "Statistic synced successfully for user: ${statistic.userId}")
+        } catch (e: Exception) {
+            Log.e("FirestoreSync", "Error syncing statistic", e)
+            // Можно добавить в очередь для повторной попытки
+        }
     }
 }

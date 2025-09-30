@@ -1,10 +1,8 @@
 package com.example.clavtrain.ui.user
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.clavtrain.data.db.ExerciseStatistic
-import com.example.clavtrain.ui.RegisterLKViewModel.RegisterState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable.isActive
 import kotlinx.coroutines.delay
@@ -68,9 +66,10 @@ class UserTrainingViewModel(): ViewModel() {
         }
     }
 
-    fun completeExercise(exerciseId: Int): ExerciseStatistic {
+    fun completeExercise(exerciseId: Int, userId: String?): ExerciseStatistic {
         timerJob?.cancel() // Останавливаем таймер если еще не остановлен
         return ExerciseStatistic(
+            userId = userId!!,
             exerciseId = exerciseId,
             mistakes = presentMistakes.value,
             timeSpent = presentTime.value,
