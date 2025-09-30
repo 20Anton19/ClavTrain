@@ -58,7 +58,11 @@ dependencies {
     //Room
     implementation(libs.room.ktx)
     implementation(libs.room.runtime)
+    implementation(libs.androidx.ui.text)
     ksp(libs.room.compiler)
+
+
+    implementation(libs.androidx.compose.material.icons)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

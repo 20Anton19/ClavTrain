@@ -21,10 +21,14 @@ sealed class Route(val path: String) {
         fun createRoute(exerciseId: Int) = "user_training/$exerciseId"
     }
     data object UserExerciseStatistic : Route("user_exercise_statistic")
+
+    data object ChangeUserData : Route("change_user_data")
+    data object ChangePassword : Route("change_password")
+
+    data object UserStatistic : Route("user_statistic")
     
     // Admin routes
     data object AdminMain : Route("admin_main")
-    data object AdminMode : Route("admin_mode")
     data object AdminExercises : Route("admin_exercises")
     data object AdminDifficulty : Route("admin_difficulty")
     data object AdminUsers : Route("admin_users")
