@@ -32,14 +32,18 @@ import android.graphics.Paint
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import com.example.clavtrain.data.db.DataBaseViewModel
+import com.example.clavtrain.data.db.ExerciseStatistic
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -181,15 +185,33 @@ fun UserExerciseStatisticScreen(
     onViewMenu: () -> Unit,
     dataBaseViewModel: DataBaseViewModel = koinViewModel()
 ) {
-    val dataList = listOf<BarData>(
-        BarData(10f, "авава"),
-        BarData(10f, "авава"),
-        BarData(10f, "авава"),
-        BarData(10f, "авава"),
-        BarData(10f, "авава")
-    )
+//    val dataList = listOf<BarData>(
+//        BarData(10f, "авава"),
+//        BarData(10f, "авава"),
+//        BarData(10f, "авава"),
+//        BarData(10f, "авава"),
+//        BarData(10f, "авава")
+//    )
 
     val statistic by dataBaseViewModel.lastStatistic.collectAsState()
+    val exerciseId = statistic?.exerciseId ?: 0
+
+    var allStatistics by remember { mutableStateOf<List<ExerciseStatistic>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        if (exerciseId != 0) {
+            dataBaseViewModel.getStatisticsByExerciseId(exerciseId)
+                .collect { allStatistics = it }
+        }
+    }
+
+    val dataList = allStatistics.mapIndexed { index, statistic ->
+        BarData(
+            value = statistic.mistakes.toFloat(), // кол-во ошибок
+            label = "${allStatistics.size - index}" // порядковый номер в обратном порядке
+        )
+    }
+
     // Показываем загрузку если статистика еще не пришла
     if (statistic == null) {
         Column(

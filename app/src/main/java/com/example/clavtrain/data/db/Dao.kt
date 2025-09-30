@@ -38,9 +38,14 @@ interface Dao {
     @Update
     suspend fun updateDifficultyLevel(difficultyLevel: DifficultyLevel)
 
+
     //СТАТИСТИКА
     @Upsert()
     suspend fun insertExerciseStatistic(exerciseStatistic: ExerciseStatistic)
+
+    //Получения всех статистик по id упражнения
+    @Query("SELECT * FROM ExerciseStatistic WHERE exerciseId = :exerciseId ORDER BY completedAt DESC")
+    fun getStatisticsByExerciseId(exerciseId: Int): Flow<List<ExerciseStatistic>>
 
 }
 

@@ -59,4 +59,8 @@ class DataBaseViewModel(
         _lastStatistic.value = statistic
         dao.insertExerciseStatistic(statistic)
     }
+
+    fun getStatisticsByExerciseId(exerciseId: Int): Flow<List<ExerciseStatistic>> {
+        return dao.getStatisticsByExerciseId(exerciseId)
+    }
 }
