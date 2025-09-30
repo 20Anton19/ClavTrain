@@ -95,7 +95,11 @@ fun UserNav(onExitApp: () -> Unit) {
             UserLKScreen()
         }
         composable(Route.Info.path) {
-            InfoScreen()
+            InfoScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
         composable(Route.AboutDevelopers.path) {
             AboutDevelopersScreen()
