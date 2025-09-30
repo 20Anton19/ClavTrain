@@ -51,7 +51,10 @@ fun BarChart(
 ) {
     val maxBarValue = maxValue ?: data.maxOfOrNull { it.value } ?: 1f
 
-    Canvas(modifier = modifier.fillMaxWidth().height(280.dp).padding(0.dp,30.dp,45.dp)) {
+    Canvas(modifier = modifier
+        .fillMaxWidth()
+        .height(280.dp)
+        .padding(0.dp, 30.dp, 45.dp)) {
         // ИЗМЕНЕНИЕ 1: Увеличиваем левый отступ для подписи оси Y
         val leftPadding = 100f // Было 60f - увеличили для подписи
         val chartHeight = size.height - 80f
@@ -219,7 +222,22 @@ fun UserExerciseStatisticScreen(
                 textAlign = TextAlign.Center,
                 fontSize = 24.sp
             )
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.weight(0.5f))
+            Text(
+                text = if (statistic!!.isSuccessful) {
+                    "Успешно пройдено"
+                } else {
+                    "Не пройдено"
+                },
+                //style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                //fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                fontSize = 24.sp
+            )
+            Spacer(modifier = Modifier.weight(0.5f))
             LazyColumn {
                 items(statisticListInfo) { item ->
                     Card(

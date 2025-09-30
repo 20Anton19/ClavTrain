@@ -2,6 +2,7 @@ package com.example.clavtrain.data.db
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import androidx.room.Upsert
@@ -14,9 +15,6 @@ interface Dao {
 
     @Delete()
     suspend fun deleteExercise(exercise: Exercise)
-
-    @Upsert()
-    suspend fun insertExerciseStatistic(exerciseStatistic: ExerciseStatistic)
 
     @Upsert()
     suspend fun insertDifficultyLevel(difficultyLevel: DifficultyLevel)
@@ -39,6 +37,10 @@ interface Dao {
 
     @Update
     suspend fun updateDifficultyLevel(difficultyLevel: DifficultyLevel)
+
+    //СТАТИСТИКА
+    @Upsert()
+    suspend fun insertExerciseStatistic(exerciseStatistic: ExerciseStatistic)
 
 }
 

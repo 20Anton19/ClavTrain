@@ -3,6 +3,7 @@ package com.example.clavtrain.ui.user
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.clavtrain.data.db.ExerciseStatistic
 import com.example.clavtrain.ui.RegisterLKViewModel.RegisterState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable.isActive
@@ -14,6 +15,9 @@ import kotlinx.coroutines.launch
 
 class UserTrainingViewModel(): ViewModel() {
     private var _fullText = ""
+    private var _maxMistakes = 0
+    private var _maxPressTime = 0L
+    private var _isSuccessful = true
     private val _userInput = MutableStateFlow<String>("")
     val userInput: StateFlow<String> = _userInput.asStateFlow()
 
@@ -37,10 +41,21 @@ class UserTrainingViewModel(): ViewModel() {
     private val _presentTime = MutableStateFlow<Long>(0L)
     val presentTime: StateFlow<Long> = _presentTime.asStateFlow()
     private var timerJob: Job? = null
-    fun setExerciseText(text: String) {
+
+    private var lastKeyPressTime: Long = 0L
+    private var currentMaxPressTime: Long = 0L
+    fun setExerciseSettings(
+        text: String,
+        maxMistakes: Int,
+        maxPressTime: Long
+    ) {
         _fullText = text
+        _maxMistakes = maxMistakes
+        _maxPressTime = maxPressTime
         _remainingText.value = _fullText
         startTimer()
+        currentMaxPressTime = maxPressTime
+        lastKeyPressTime = System.currentTimeMillis()
     }
 
     private fun startTimer() {
@@ -53,18 +68,53 @@ class UserTrainingViewModel(): ViewModel() {
         }
     }
 
+    fun completeExercise(exerciseId: Int): ExerciseStatistic {
+        timerJob?.cancel() // Останавливаем таймер если еще не остановлен
+        return ExerciseStatistic(
+            exerciseId = exerciseId,
+            mistakes = presentMistakes.value,
+            timeSpent = presentTime.value,
+            avgTime = if (presentLength.value > 0) presentTime.value / presentLength.value else 0L,
+            isSuccessful = _isSuccessful,
+            completedAt = System.currentTimeMillis()
+        )
+    }
+
     fun everyTextChange(
         newText: String
     ) {
         if (newText.length <= _fullText.length) {
+            val currentTime = System.currentTimeMillis()
             val tempIsCorrect = _fullText.take(newText.length) == newText
             val isAddingCharacter = newText.length > userInput.value.length
+
+            // Проверяем время между нажатиями только если добавляем новый символ
+            if (isAddingCharacter && userInput.value.isNotEmpty()) {
+                val timeBetweenPresses = currentTime - lastKeyPressTime
+
+                // Если время между нажатиями превышает максимальное - добавляем ошибку
+                if (timeBetweenPresses > currentMaxPressTime) {
+                    _presentMistakes.value += 1
+                    if (_presentMistakes.value > _maxMistakes) {
+                        _isSuccessful = false
+                        _isCompleted.value = true
+                    }
+                }
+            }
+
+
+            // Обновляем время последнего нажатия
+            lastKeyPressTime = currentTime
 
             _userInput.value = newText
             _presentLength.value = newText.length
 
             if (!tempIsCorrect and isAddingCharacter) {
                 _presentMistakes.value+=1
+                if (_presentMistakes.value > _maxMistakes) {
+                    _isSuccessful = false
+                    _isCompleted.value = true
+                }
             }
 
             if ((newText.length == _fullText.length) and tempIsCorrect) {

@@ -43,76 +43,76 @@ fun MainScreen(
 ) {
 //    val currentTime = System.currentTimeMillis()
 //    LaunchedEffect(Unit) {
-//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(1,"1", 1,1,1))
-//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(2,"2", 2,2,2))
-//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(3,"3", 3,3,3))
-//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(4,"4", 4,4,4))
-//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(5,"5", 5,5,5))
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(1,"Легко", 50,5,1500))
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(2,"Нормально", 150,3,1000))
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(3,"Сложно", 250,2,800))
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(4,"Очень сложно", 350,1,500))
+//        dataBaseViewModel.insertDifficultyLevel(DifficultyLevel(5,"Профи", 350,0,300))
 //
 //    // Добавляем по 2 упражнения на каждый уровень сложности
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 1-1",
+//        name = "Упражнение 1",
 //        difficultyId = 1,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 1-1"
+//        text = "фбплвьмдывлкдлывадлсьмыжв"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 1-2",
+//        name = "Упражнение 2",
 //        difficultyId = 1,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 1-2"
+//        text = "важдпрлывапдлтвпморэщшфоьхжз"
 //    ))
 //
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 2-1",
+//        name = "Упражнение 3",
 //        difficultyId = 2,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 2-1"
+//        text = "яывпждлэпиджявмждлэоцуадлкпжфдл"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 2-2",
+//        name = "Упражнение 4",
 //        difficultyId = 2,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 2-2"
+//        text = "япаяэмыэжадлаилявмывлмыаыждлаыжпдл"
 //    ))
 //
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 3-1",
+//        name = "Упражнение 5",
 //        difficultyId = 3,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 3-1"
+//        text = "явдлапмоядмьыявдалмьяэджм"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 3-2",
+//        name = "Упражнение 6",
 //        difficultyId = 3,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 3-2"
+//        text = "ядавлпояфжэалдывждлыфэждалыждалфажыа"
 //    ))
 //
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 4-1",
+//        name = "Упражнение 7",
 //        difficultyId = 4,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 4-1"
+//        text = "фывждаплоэавждфыьажыфдлопваэждавоажыфдлопва"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 4-2",
+//        name = "Упражнение 8",
 //        difficultyId = 4,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 4-2"
+//        text = "фывжапдлфэждпамоваэдлпофыэзпадфлофывафаажыфдлопва"
 //    ))
 //
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 5-1",
+//        name = "Упражнение 9",
 //        difficultyId = 5,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 5-1"
+//        text = "фаыфждалваэдлыфоажволфыдвлпеоваэдалыажэдвыалофэжадлфдлж"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 5-2",
+//        name = "Упражнение 10",
 //        difficultyId = 5,
 //        createdAt = currentTime,
-//        text = "Текст упражнения 5-2"
+//        text = "флдыжаопэдржлфыаэдлвапдэыфловапжрлыфважлвапжыуфдлвэждплыажэдл"
 //        )
 //    ) }
 

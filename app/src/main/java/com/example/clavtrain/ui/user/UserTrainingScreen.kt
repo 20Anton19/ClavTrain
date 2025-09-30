@@ -22,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -62,11 +63,20 @@ fun UserTrainingScreen(
     val presentTime by userTrainingViewModel.presentTime.collectAsStateWithLifecycle()
     val remainingText by userTrainingViewModel.remainingText.collectAsStateWithLifecycle()
 
+    val levels by dataBaseViewModel.difficultyLevels.collectAsState()
     // Загружаем упражнение на экране и передаем в ViewModel
     LaunchedEffect(exerciseId) {
         dataBaseViewModel.getExerciseById(exerciseId).collect { exercise ->
             exercise?.let {
-                userTrainingViewModel.setExerciseText(it.text)
+                // Находим уровень сложности из кэшированного списка
+                val difficultyLevel = levels.find { it.id == exercise.difficultyId }
+                difficultyLevel?.let { level ->
+                    userTrainingViewModel.setExerciseSettings(
+                        text = exercise.text,
+                        maxMistakes = level.maxMistakes,
+                        maxPressTime = level.maxPressTime
+                    )
+                }
             }
         }
     }
@@ -82,16 +92,7 @@ fun UserTrainingScreen(
     //Проверка БД
     LaunchedEffect(isCompleted) {
         if (isCompleted) {
-            // Создаем и сохраняем статистику
-            val statistic = ExerciseStatistic(
-                exerciseId = exerciseId,
-                mistakes = presentMistakes,
-                timeSpent = presentTime,
-                avgTime = if (presentLength > 0) presentTime / presentLength else 0L,
-                isSuccessful = true,
-                completedAt = System.currentTimeMillis()
-            )
-
+            val statistic = userTrainingViewModel.completeExercise(exerciseId)
             dataBaseViewModel.saveStatistic(statistic)  // ← сохраняем во ViewModel
             onViewStatistics()  // ← переходим на экран статистики
         }

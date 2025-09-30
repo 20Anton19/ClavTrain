@@ -55,11 +55,8 @@ class DataBaseViewModel(
     private val _lastStatistic = MutableStateFlow<ExerciseStatistic?>(null)
     val lastStatistic: StateFlow<ExerciseStatistic?> = _lastStatistic.asStateFlow()
 
-    fun saveStatistic(statistic: ExerciseStatistic) {
+    suspend fun saveStatistic(statistic: ExerciseStatistic) {
         _lastStatistic.value = statistic
-    }
-
-    fun clearStatistic() {
-        _lastStatistic.value = null
+        dao.insertExerciseStatistic(statistic)
     }
 }
