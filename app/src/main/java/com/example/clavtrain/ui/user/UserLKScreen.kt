@@ -44,9 +44,9 @@ fun UserLKScreen(
     onViewUserStatistic: () -> Unit,
     onChangeUserData: () -> Unit,
     onBackClick: () -> Unit,
-//    dataBaseViewModel: DataBaseViewModel = koinViewModel()
+    dataBaseViewModel: DataBaseViewModel = koinViewModel()
 ) {
-//    val currentUser by dataBaseViewModel.currentUser.collectAsState()
+    val currentUser by dataBaseViewModel.currentUser.collectAsState()
     var isPasswordVisible by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
@@ -83,7 +83,7 @@ fun UserLKScreen(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = "email",
+                    text = currentUser!!.middleName,
                     modifier = Modifier.weight(2f),
                     color = Color.Gray
                 )
@@ -112,7 +112,7 @@ fun UserLKScreen(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = "email",
+                    text = currentUser!!.firstName,
                     modifier = Modifier.weight(2f),
                     color = Color.Gray
                 )
@@ -141,7 +141,7 @@ fun UserLKScreen(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = "email",
+                    text = currentUser!!.lastName,
                     modifier = Modifier.weight(2f),
                     color = Color.Gray
                 )
@@ -170,7 +170,7 @@ fun UserLKScreen(
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = "email",
+                    text = currentUser!!.email,
                     modifier = Modifier.weight(2f),
                     color = Color.Gray
                 )
@@ -200,7 +200,7 @@ fun UserLKScreen(
                 )
 
                 Text(
-                    text = if (isPasswordVisible) "myPassword123" else "••••••••••",
+                    text = if (isPasswordVisible) currentUser!!.password else "••••••••••",
                     modifier = Modifier.weight(2f),
                     fontFamily = if (isPasswordVisible) FontFamily.Default else FontFamily.Monospace
                 )
