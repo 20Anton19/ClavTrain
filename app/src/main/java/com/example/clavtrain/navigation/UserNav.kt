@@ -102,7 +102,11 @@ fun UserNav(onExitApp: () -> Unit) {
             )
         }
         composable(Route.AboutDevelopers.path) {
-            AboutDevelopersScreen()
+            AboutDevelopersScreen(
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }
