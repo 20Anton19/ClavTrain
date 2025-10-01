@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun AdminEditDifficultyScreen(
+    levelIndex: Int,  // ← получаем индекс
     onBackClick: () -> Unit
 ) {
 

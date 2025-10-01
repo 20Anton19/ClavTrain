@@ -38,7 +38,9 @@ sealed class Route(val path: String) {
 
     data object AdminEditExercise : Route("admin_edit_exercise")
 
-    data object AdminEditDifficulty : Route("admin_edit_difficulty")
+    data object AdminEditDifficulty : Route("admin_edit_difficulty/{levelIndex}"){  // ← добавляем параметр
+        fun createRoute(levelIndex: Int) = "admin_edit_difficulty/$levelIndex"
+    }
 
 
 

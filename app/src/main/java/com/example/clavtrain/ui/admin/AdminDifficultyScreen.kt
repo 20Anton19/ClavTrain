@@ -38,7 +38,7 @@ import com.example.clavtrain.data.db.DifficultyLevel
 
 @Composable
 fun AdminDifficultyScreen(
-    onEditDifficultyScreen: () -> Unit,
+    onEditDifficultyScreen: (Int) -> Unit,
     onBackClick: () -> Unit,
     serverViewModel: ServerViewModel = koinViewModel()
 ) {
@@ -61,8 +61,9 @@ fun AdminDifficultyScreen(
         )
         LazyColumn {
             items(levels) { level ->
+                val levelIndex = levels.indexOf(level)
                 Card(
-                    onClick = { onEditDifficultyScreen() },
+                    onClick = { onEditDifficultyScreen(levelIndex) },
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xffe6d9e8)
                     ),

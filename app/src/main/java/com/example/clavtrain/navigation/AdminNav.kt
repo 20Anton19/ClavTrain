@@ -1,14 +1,17 @@
 package com.example.clavtrain.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.clavtrain.ui.admin.AdminDifficultyScreen
 import com.example.clavtrain.ui.admin.AdminEditDifficultyScreen
 import com.example.clavtrain.ui.admin.AdminEditExerciseScreen
 import com.example.clavtrain.ui.admin.AdminExercisesScreen
 import com.example.clavtrain.ui.admin.AdminModeScreen
+import com.example.clavtrain.ui.user.UserExercisesScreen
 
 @Composable
 fun AdminNav(onExitApp: () -> Unit) {
@@ -54,16 +57,42 @@ fun AdminNav(onExitApp: () -> Unit) {
 
         composable(Route.AdminDifficulty.path) {
             AdminDifficultyScreen(
-                onEditDifficultyScreen = {
-                    navController.navigate(Route.AdminEditDifficulty.path)
+                onEditDifficultyScreen = { levelIndex ->
+                    navController.navigate(Route.AdminEditDifficulty.createRoute(levelIndex))
                 },
                 onBackClick = {
                     navController.popBackStack()
                 }
             )
         }
-            composable(Route.AdminEditDifficulty.path) {
+            composable(
+                Route.AdminEditDifficulty.path,
+                arguments = listOf(
+                    navArgument("levelIndex") { type = NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val levelIndex = backStackEntry.arguments?.getInt("levelIndex") ?: 0
                 AdminEditDifficultyScreen(
+                    levelIndex = levelIndex,  // ← передаем индекс
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+            composable(
+                route = Route.UserExercises.path,  // "user_exercises/{levelIndex}"
+                arguments = listOf(
+                    navArgument("levelIndex") { type = NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val levelIndex = backStackEntry.arguments?.getInt("levelIndex") ?: 0
+
+                UserExercisesScreen(
+                    levelIndex = levelIndex,  // ← передаем индекс
+                    onStartTraining = { exerciseId ->
+                        navController.navigate(Route.UserTraining.createRoute(exerciseId))
+                    },
                     onBackClick = {
                         navController.popBackStack()
                     }
