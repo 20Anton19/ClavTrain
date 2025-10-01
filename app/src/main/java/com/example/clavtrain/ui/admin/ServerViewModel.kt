@@ -15,6 +15,9 @@ class ServerViewModel: ViewModel() {
     private val _difficultyLevels = MutableStateFlow<List<DifficultyLevel>>(emptyList())
     val difficultyLevels: StateFlow<List<DifficultyLevel>> = _difficultyLevels.asStateFlow()
 
+    private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Idle)
+    val updateState: StateFlow<UpdateState> = _updateState.asStateFlow()
+
     init {
         loadDifficultyLevels()
     }
@@ -48,5 +51,44 @@ class ServerViewModel: ViewModel() {
             .addOnFailureListener { exception ->
                 Log.e("ServerViewModel", "Error loading difficulty levels", exception)
             }
+    }
+
+    fun updateDifficultyLevel(updatedLevel: DifficultyLevel) {
+        val levelId = updatedLevel.id
+        if (levelId == null) {
+            _updateState.value = UpdateState.Error("Ошибка: ID уровня не найден")
+            return
+        }
+
+        _updateState.value = UpdateState.Loading
+
+        db.collection("difficulty_levels")
+            .document(levelId.toString())
+            .update(
+                mapOf(
+                    "maxSymbols" to updatedLevel.maxSymbols,
+                    "maxMistakes" to updatedLevel.maxMistakes,
+                    "maxPressTime" to updatedLevel.maxPressTime
+                )
+            )
+            .addOnSuccessListener {
+                _updateState.value = UpdateState.Success
+                // Обновляем локальный список
+                loadDifficultyLevels()
+            }
+            .addOnFailureListener { e ->
+                _updateState.value = UpdateState.Error("Ошибка сохранения: ${e.message}")
+            }
+    }
+
+    fun clearUpdateState() {
+        _updateState.value = UpdateState.Idle
+    }
+
+    sealed class UpdateState {
+        object Idle : UpdateState()
+        object Loading : UpdateState()
+        object Success : UpdateState()
+        data class Error(val message: String) : UpdateState()
     }
 }
