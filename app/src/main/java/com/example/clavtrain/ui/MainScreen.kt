@@ -51,64 +51,64 @@ fun MainScreen(
 //
 //    // Добавляем по 2 упражнения на каждый уровень сложности
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 1",
+//        name = "Мое упражнение 1",
 //        difficultyId = 1,
 //        createdAt = currentTime,
 //        text = "фбплвьмдывлкдлывадлсьмыжв"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 2",
+//        name = "Мое упражнение 2",
 //        difficultyId = 1,
 //        createdAt = currentTime,
 //        text = "важдпрлывапдлтвпморэщшфоьхжз"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 3",
+//        name = "Мое упражнение 3",
 //        difficultyId = 2,
 //        createdAt = currentTime,
 //        text = "яывпждлэпиджявмждлэоцуадлкпжфдл"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 4",
+//        name = "Мое упражнение 4",
 //        difficultyId = 2,
 //        createdAt = currentTime,
 //        text = "япаяэмыэжадлаилявмывлмыаыждлаыжпдл"
 //    ))
 //
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 5",
+//        name = "Мое упражнение 5",
 //        difficultyId = 3,
 //        createdAt = currentTime,
 //        text = "явдлапмоядмьыявдалмьяэджм"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 6",
+//        name = "Мое упражнение 6",
 //        difficultyId = 3,
 //        createdAt = currentTime,
 //        text = "ядавлпояфжэалдывждлыфэждалыждалфажыа"
 //    ))
 //
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 7",
+//        name = "Мое упражнение 7",
 //        difficultyId = 4,
 //        createdAt = currentTime,
 //        text = "фывждаплоэавждфыьажыфдлопваэждавоажыфдлопва"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 8",
+//        name = "Мое упражнение 8",
 //        difficultyId = 4,
 //        createdAt = currentTime,
 //        text = "фывжапдлфэждпамоваэдлпофыэзпадфлофывафаажыфдлопва"
 //    ))
 //
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 9",
+//        name = "Мое упражнение 9",
 //        difficultyId = 5,
 //        createdAt = currentTime,
 //        text = "фаыфждалваэдлыфоажволфыдвлпеоваэдалыажэдвыалофэжадлфдлж"
 //    ))
 //    dataBaseViewModel.insertExercise(Exercise(
-//        name = "Упражнение 10",
+//        name = "Упражнение Миши Осипова",
 //        difficultyId = 5,
 //        createdAt = currentTime,
 //        text = "флдыжаопэдржлфыаэдлвапдэыфловапжрлыфважлвапжыуфдлвэждплыажэдл"
