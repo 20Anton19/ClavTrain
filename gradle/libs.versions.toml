@@ -25,6 +25,8 @@ uiText = "1.9.2"
 iconsVersion = "1.6.0"
 foundationLayout = "1.9.2"
 
+accompanistVersion = "0.30.1"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -67,6 +69,8 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCom
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
 androidx-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
+
+accompanist = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanistVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

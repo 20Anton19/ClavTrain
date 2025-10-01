@@ -1,6 +1,7 @@
 package com.example.clavtrain.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,11 +13,16 @@ import com.example.clavtrain.ui.admin.AdminEditExerciseScreen
 import com.example.clavtrain.ui.admin.AdminExercisesScreen
 import com.example.clavtrain.ui.admin.AdminModeScreen
 import com.example.clavtrain.ui.user.UserExercisesScreen
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun AdminNav(onExitApp: () -> Unit) {
     val navController = rememberNavController()
 
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.isSystemBarsVisible = false
+    }
     NavHost(navController = navController, startDestination = Route.AdminMain.path) {
         composable(Route.AdminMain.path) {
             AdminModeScreen(

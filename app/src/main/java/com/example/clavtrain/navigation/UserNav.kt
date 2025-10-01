@@ -1,6 +1,7 @@
 package com.example.clavtrain.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,11 +18,15 @@ import com.example.clavtrain.ui.user.UserLKScreen
 import com.example.clavtrain.ui.user.UserMenuScreen
 import com.example.clavtrain.ui.user.UserStatisticScreen
 import com.example.clavtrain.ui.user.UserTrainingScreen
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun UserNav(onExitApp: () -> Unit) {
     val navController = rememberNavController()
-
+    val systemUiController = rememberSystemUiController()
+    SideEffect {
+        systemUiController.isSystemBarsVisible = false
+    }
     NavHost(navController = navController, startDestination = Route.UserMenu.path) {
         composable(Route.UserMenu.path) {
             UserMenuScreen(
