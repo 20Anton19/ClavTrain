@@ -4,7 +4,12 @@ import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Firebase
+import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthEmailException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +22,10 @@ class RegisterLKViewModel: ViewModel() {
 
     val auth = Firebase.auth
     val db = Firebase.firestore
+
+    fun setError(message: String) {
+        _registerState.value = RegisterState.Error(message)
+    }
     fun signUp(
         email: String,
         password: String,
@@ -31,15 +40,26 @@ class RegisterLKViewModel: ViewModel() {
                     Log.d(TAG, "createUserWithEmail:success")
                     val userId = auth.currentUser?.uid
                     if (userId != null) {
-                        // Добавляем пользователя в Firestore
                         addUserToFirestore(userId, email, password, firstName, middleName, lastName)
                     } else {
                         _registerState.value = RegisterState.Error("Не удалось получить ID пользователя")
                     }
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    _registerState.value = RegisterState.Error(task.exception?.message ?: "Unknown error")
+                    val errorMessage = when (task.exception) {
+                        is FirebaseAuthWeakPasswordException -> "Пароль слишком слабый. Используйте от 4 до 10 символов"
+                        is FirebaseAuthInvalidCredentialsException -> {
+                            when {
+                                task.exception?.message?.contains("email") == true -> "Неверный формат email"
+                                else -> "Неверные учетные данные"
+                            }
+                        }
+                        is FirebaseAuthUserCollisionException -> "Пользователь с таким email уже существует"
+                        is FirebaseAuthEmailException -> "Неверный формат email"
+                        is FirebaseNetworkException -> "Ошибка сети. Проверьте подключение к интернету"
+                        else -> task.exception?.message ?: "Неизвестная ошибка при регистрации"
+                    }
+                    _registerState.value = RegisterState.Error(errorMessage)
                 }
             }
     }
@@ -70,8 +90,11 @@ class RegisterLKViewModel: ViewModel() {
                 _registerState.value = RegisterState.Success
             }
             .addOnFailureListener { e ->
-                Log.w(TAG, "Error adding user to Firestore", e)
-                _registerState.value = RegisterState.Error("Ошибка сохранения данных пользователя")
+                // Если не удалось добавить в Firestore, удаляем пользователя из Auth
+                auth.currentUser?.delete()?.addOnCompleteListener {
+                    _registerState.value =
+                        RegisterState.Error("Ошибка сохранения данных пользователя: ${e.message}")
+                }
             }
     }
 
@@ -80,5 +103,9 @@ class RegisterLKViewModel: ViewModel() {
         object Loading : RegisterState()
         object Success : RegisterState()
         data class Error(val message: String) : RegisterState()
+    }
+
+    companion object {
+        private const val TAG = "RegisterLKViewModel"
     }
 }
