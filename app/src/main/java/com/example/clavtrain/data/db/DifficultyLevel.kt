@@ -12,3 +12,4 @@ data class DifficultyLevel(
     val maxMistakes: Int,
     val maxPressTime: Long
 )
+
