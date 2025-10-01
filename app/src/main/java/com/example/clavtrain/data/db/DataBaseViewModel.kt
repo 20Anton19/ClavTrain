@@ -4,6 +4,9 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
+import com.google.firebase.auth.EmailAuthProvider
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
 import kotlinx.coroutines.flow.Flow
@@ -207,6 +210,48 @@ class DataBaseViewModel(
         } catch (e: Exception) {
             Log.e("EmailCheck", "Error checking email uniqueness", e)
             false
+        }
+    }
+
+    suspend fun updatePassword(
+        currentPassword: String,
+        newPassword: String
+    ): Boolean {
+        val currentUser = _currentUser.value
+        val userId = currentUser?.id ?: return false // ← проверяем что id не null
+        Log.d("PasswordUpdate", "Текущий пароль ${currentUser.password}")
+        try {
+            // 1. Проверяем текущий пароль (сравниваем с тем что в Firestore)
+            if (currentUser.password != currentPassword) {
+                throw Exception("Неверный текущий пароль")
+            }
+
+            // 2. Проверяем что новый пароль не совпадает со старым
+            if (currentPassword == newPassword) {
+                throw Exception("Новый пароль должен отличаться от старого")
+            }
+
+            // 3. Проверяем длину пароля
+            if (newPassword.length < 6) {
+                throw Exception("Пароль должен содержать минимум 6 символов")
+            }
+
+            // 4. Обновляем пароль ТОЛЬКО в Firestore
+            Firebase.firestore.collection("users")
+                .document(currentUser.id)
+                .update("password", newPassword)
+                .await()
+
+            // 5. Обновляем локального пользователя
+            val updatedUser = currentUser.copy(password = newPassword)
+            _currentUser.value = updatedUser
+
+            Log.d("PasswordUpdate", "Password updated successfully in Firestore")
+            return true
+
+        } catch (e: Exception) {
+            Log.e("PasswordUpdate", "Error updating password", e)
+            throw e // Пробрасываем ошибку чтобы показать в UI
         }
     }
 }
