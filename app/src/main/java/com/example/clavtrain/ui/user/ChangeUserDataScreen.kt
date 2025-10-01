@@ -87,6 +87,7 @@ fun ChangeUserDataScreen(
         if (showSuccess) {
             Card(
                 modifier = Modifier.fillMaxWidth(),
+                onClick = {showSuccess = false},
                 colors = CardDefaults.cardColors(containerColor = Color.Green.copy(alpha = 0.1f))
             ) {
                 Text(
@@ -232,16 +233,23 @@ fun ChangeUserDataScreen(
                 if (currentUser?.id != null) {
                     isLoading = true
                     scope.launch {
-                        try {
-                            dataBaseViewModel.updateUserProfile(
-                                firstName = firstName,
-                                middleName = middleName,
-                                lastName = lastName,
-                                email = email
-                            )
-                        } catch (e: Exception) {
-                            // Обработка ошибки
-                        } finally {
+                        val isUnique = dataBaseViewModel.isEmailUniqueForCurrentUser(email)
+                        if (isUnique) {
+                            try {
+                                dataBaseViewModel.updateUserProfile(
+                                    firstName = firstName,
+                                    middleName = middleName,
+                                    lastName = lastName,
+                                    email = email
+                                )
+                            } catch (e: Exception) {
+                                // Обработка ошибки
+                            } finally {
+                                isLoading = false
+                                showSuccess = true
+                            }
+                        }
+                        else {
                             isLoading = false
                         }
                     }

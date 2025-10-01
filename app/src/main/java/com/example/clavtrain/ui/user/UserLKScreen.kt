@@ -17,8 +17,10 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -48,200 +50,211 @@ fun UserLKScreen(
 ) {
     val currentUser by dataBaseViewModel.currentUser.collectAsState()
     var isPasswordVisible by remember { mutableStateOf(false) }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Личный кабинет",
-            //style = MaterialTheme.typography.headlineMedium,
+    if (currentUser!=null) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 24.dp),
-            //fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-            fontSize = 24.sp
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .padding(16.dp),
-            elevation = CardDefaults.cardElevation(4.dp)
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
+            Text(
+                text = "Личный кабинет",
+                //style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 24.dp),
+                //fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center,
+                fontSize = 24.sp
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            Card(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+                elevation = CardDefaults.cardElevation(4.dp)
             ) {
-                Text(
-                    text = "Фамилия:",
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = currentUser!!.middleName,
-                    modifier = Modifier.weight(2f),
-                    color = Color.Gray
-                )
-
-                Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = "Фамилия"
-                )
-            }
-        }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            elevation = CardDefaults.cardElevation(4.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Имя:",
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = currentUser!!.firstName,
-                    modifier = Modifier.weight(2f),
-                    color = Color.Gray
-                )
-
-                Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = "Имя"
-                )
-            }
-        }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            elevation = CardDefaults.cardElevation(4.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Отчество:",
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = currentUser!!.lastName,
-                    modifier = Modifier.weight(2f),
-                    color = Color.Gray
-                )
-
-                Icon(
-                    imageVector = Icons.Filled.Person,
-                    contentDescription = "Отчество"
-                )
-            }
-        }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            elevation = CardDefaults.cardElevation(4.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Email:",
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = currentUser!!.email,
-                    modifier = Modifier.weight(2f),
-                    color = Color.Gray
-                )
-
-                Icon(
-                    imageVector = Icons.Filled.Email,
-                    contentDescription = "Email"
-                )
-            }
-        }
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            elevation = CardDefaults.cardElevation(4.dp)
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "Пароль:",
-                    modifier = Modifier.weight(1f),
-                    fontWeight = FontWeight.Bold
-                )
-
-                Text(
-                    text = if (isPasswordVisible) currentUser!!.password else "••••••••••",
-                    modifier = Modifier.weight(2f),
-                    fontFamily = if (isPasswordVisible) FontFamily.Default else FontFamily.Monospace
-                )
-
-                IconButton(
-                    onClick = { isPasswordVisible = !isPasswordVisible }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
+                    Text(
+                        text = "Фамилия:",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = currentUser!!.middleName,
+                        modifier = Modifier.weight(2f),
+                        color = Color.Gray
+                    )
+
                     Icon(
-                        imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                        contentDescription = if (isPasswordVisible) "Скрыть пароль" else "Показать пароль"
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "Фамилия"
                     )
                 }
             }
-        }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Имя:",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = currentUser!!.firstName,
+                        modifier = Modifier.weight(2f),
+                        color = Color.Gray
+                    )
 
-        Spacer(modifier = Modifier.weight(1f))
-        Button(
-            onClick = onViewUserStatistic,
-            modifier = Modifier
-                .width(250.dp)
-                .padding(vertical = 4.dp)
-        ) {
-            Text("Статистика")
-        }
-        Button(
-            onClick = onChangeUserData,
-            modifier = Modifier
-                .width(250.dp)
-                .padding(vertical = 4.dp)
-        ) {
-            Text("Изменить данные")
-        }
-        Button(
-            onClick = onBackClick,
-            modifier = Modifier
-                .width(250.dp)
-                .padding(vertical = 8.dp)
-        ) {
-            Text("Выйти")
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "Имя"
+                    )
+                }
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Отчество:",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = currentUser!!.lastName,
+                        modifier = Modifier.weight(2f),
+                        color = Color.Gray
+                    )
+
+                    Icon(
+                        imageVector = Icons.Filled.Person,
+                        contentDescription = "Отчество"
+                    )
+                }
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Email:",
+                        fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Text(
+                        text = currentUser!!.email,
+                        modifier = Modifier.weight(2f),
+                        color = Color.Gray
+                    )
+
+                    Icon(
+                        imageVector = Icons.Filled.Email,
+                        contentDescription = "Email"
+                    )
+                }
+            }
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                elevation = CardDefaults.cardElevation(4.dp)
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Пароль:",
+                        modifier = Modifier.weight(1f),
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        text = if (isPasswordVisible) currentUser!!.password else "••••••••••",
+                        modifier = Modifier.weight(2f),
+                        fontFamily = if (isPasswordVisible) FontFamily.Default else FontFamily.Monospace
+                    )
+
+                    IconButton(
+                        onClick = { isPasswordVisible = !isPasswordVisible }
+                    ) {
+                        Icon(
+                            imageVector = if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = if (isPasswordVisible) "Скрыть пароль" else "Показать пароль"
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+            Button(
+                onClick = onViewUserStatistic,
+                modifier = Modifier
+                    .width(250.dp)
+                    .padding(vertical = 4.dp)
+            ) {
+                Text("Статистика")
+            }
+            Button(
+                onClick = onChangeUserData,
+                modifier = Modifier
+                    .width(250.dp)
+                    .padding(vertical = 4.dp)
+            ) {
+                Text("Изменить данные")
+            }
+            Button(
+                onClick = onBackClick,
+                modifier = Modifier
+                    .width(250.dp)
+                    .padding(vertical = 8.dp)
+            ) {
+                Text("Выйти")
+            }
         }
     }
+    else {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+
 }
 
 @Preview(showBackground = true)

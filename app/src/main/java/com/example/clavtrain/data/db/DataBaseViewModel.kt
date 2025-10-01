@@ -190,4 +190,23 @@ class DataBaseViewModel(
             return false
         }
     }
+
+    suspend fun isEmailUniqueForCurrentUser(email: String): Boolean {
+        val currentUser = _currentUser.value ?: return true
+
+        return try {
+            val query = Firebase.firestore.collection("users")
+                .whereEqualTo("email", email.trim().lowercase())
+                .get()
+                .await()
+
+            // Email уникальный если:
+            // 1. Нет пользователей с таким email ИЛИ
+            // 2. Есть пользователь с таким email, но это текущий пользователь
+            query.isEmpty || query.documents.any { it.id == currentUser.id }
+        } catch (e: Exception) {
+            Log.e("EmailCheck", "Error checking email uniqueness", e)
+            false
+        }
+    }
 }
