@@ -8,6 +8,7 @@ import com.example.clavtrain.data.db.DataBaseViewModel
 import com.example.clavtrain.ui.EntryLKViewModel
 import com.example.clavtrain.ui.MainViewModel
 import com.example.clavtrain.ui.RegisterLKViewModel
+import com.example.clavtrain.ui.admin.ServerViewModel
 import com.example.clavtrain.ui.user.UserTrainingViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
@@ -30,4 +31,6 @@ val mainModule = module {
     viewModelOf(::EntryLKViewModel)
     viewModelOf(::RegisterLKViewModel)
     viewModelOf(::UserTrainingViewModel)
+
+    single<ServerViewModel> { ServerViewModel() } // ← ОДНА на всё приложение
 }

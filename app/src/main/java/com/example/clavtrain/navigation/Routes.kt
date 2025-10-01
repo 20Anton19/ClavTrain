@@ -33,4 +33,20 @@ sealed class Route(val path: String) {
     data object AdminDifficulty : Route("admin_difficulty")
     data object AdminUsers : Route("admin_users")
     data object AdminStats : Route("admin_stats")
+
+
+
+    data object AdminEditExercise : Route("admin_edit_exercise")
+
+    data object AdminEditDifficulty : Route("admin_edit_difficulty")
+
+
+
+
+
+
+
+
+
+
 } 

@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.clavtrain.ui.theme.ClavTrainTheme
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
@@ -36,7 +37,8 @@ fun AdminModeScreen(
     onViewDifficultyLevels: () -> Unit,
     onViewUserStatistics: () -> Unit,
     onViewStatisticsOfExerciseCompletion: () -> Unit,
-    onExitApp: () -> Unit
+    onExitApp: () -> Unit,
+//    serverViewModel: ServerViewModel = koinViewModel()
 ) {
     Column(
         modifier = Modifier

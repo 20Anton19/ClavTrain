@@ -26,6 +26,7 @@ class DataBaseViewModel(
     init {
         loadCurrentUser()
         loadAllDifficultyLevels()
+//        insertInitialDifficultyLevels()
     }
     private val _difficultyLevels = MutableStateFlow<List<DifficultyLevel>>(emptyList())
     val difficultyLevels: StateFlow<List<DifficultyLevel>> = _difficultyLevels.asStateFlow()
@@ -266,4 +267,43 @@ class DataBaseViewModel(
             throw e // Пробрасываем ошибку чтобы показать в UI
         }
     }
+
+//    private fun insertInitialDifficultyLevels() {
+//        val db = Firebase.firestore
+//        viewModelScope.launch {
+//            // Проверяем, есть ли уже документы в коллекции
+//            db.collection("difficulty_levels")
+//                .get()
+//                .addOnSuccessListener { querySnapshot ->
+//                    if (querySnapshot.isEmpty) {
+//                        // Коллекция пустая - добавляем уровни
+//                        val levels = listOf(
+//                            DifficultyLevel(1, "Легко", 50, 5, 1500),
+//                            DifficultyLevel(2, "Нормально", 150, 3, 1000),
+//                            DifficultyLevel(3, "Сложно", 250, 2, 800),
+//                            DifficultyLevel(4, "Очень сложно", 350, 1, 500),
+//                            DifficultyLevel(5, "Профи", 350, 0, 300)
+//                        )
+//
+//                        levels.forEach { level ->
+//                            db.collection("difficulty_levels")
+//                                .document(level.id.toString()) // Используем ID как ID документа
+//                                .set(level)
+//                                .addOnSuccessListener {
+//                                    Log.d("FirestoreInit", "Level ${level.name} added successfully")
+//                                }
+//                                .addOnFailureListener { e ->
+//                                    Log.e("FirestoreInit", "Error adding level ${level.name}", e)
+//                                }
+//                        }
+//                        Log.d("FirestoreInit", "All difficulty levels added to Firestore")
+//                    } else {
+//                        Log.d("FirestoreInit", "Difficulty levels already exist in Firestore")
+//                    }
+//                }
+//                .addOnFailureListener { e ->
+//                    Log.e("FirestoreInit", "Error checking existing levels", e)
+//                }
+//        }
+//    }
 }

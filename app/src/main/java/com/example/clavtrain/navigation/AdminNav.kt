@@ -4,6 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.clavtrain.ui.admin.AdminDifficultyScreen
+import com.example.clavtrain.ui.admin.AdminEditDifficultyScreen
+import com.example.clavtrain.ui.admin.AdminEditExerciseScreen
+import com.example.clavtrain.ui.admin.AdminExercisesScreen
 import com.example.clavtrain.ui.admin.AdminModeScreen
 
 @Composable
@@ -30,5 +34,40 @@ fun AdminNav(onExitApp: () -> Unit) {
                 }
             )
         }
+        composable(Route.AdminExercises.path) {
+            AdminExercisesScreen(
+                onEditExerciseScreen = {
+                    navController.navigate(Route.AdminEditExercise.path)
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+            composable(Route.AdminEditExercise.path) {
+                AdminEditExerciseScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+
+        composable(Route.AdminDifficulty.path) {
+            AdminDifficultyScreen(
+                onEditDifficultyScreen = {
+                    navController.navigate(Route.AdminEditDifficulty.path)
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+            composable(Route.AdminEditDifficulty.path) {
+                AdminEditDifficultyScreen(
+                    onBackClick = {
+                        navController.popBackStack()
+                    }
+                )
+            }
     }
 }
