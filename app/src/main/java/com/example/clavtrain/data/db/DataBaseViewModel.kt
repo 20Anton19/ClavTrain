@@ -149,4 +149,45 @@ class DataBaseViewModel(
             // Можно добавить в очередь для повторной попытки
         }
     }
+
+    suspend fun updateUserProfile(
+        firstName: String,
+        middleName: String,
+        lastName: String,
+        email: String
+    ): Boolean {
+        val currentUser = _currentUser.value
+        val userId = currentUser?.id ?: return false // ← проверяем что id не null
+
+        try {
+            // Обновляем в Firestore
+            val updates = mapOf(
+                "firstName" to firstName,
+                "middleName" to middleName,
+                "lastName" to lastName,
+                "email" to email
+            )
+
+            Firebase.firestore.collection("users")
+                .document(userId)
+                .update(updates)
+                .await()
+
+            // ОБНОВЛЯЕМ локальный currentUser
+            val updatedUser = currentUser.copy(
+                firstName = firstName,
+                middleName = middleName,
+                lastName = lastName,
+                email = email
+            )
+            _currentUser.value = updatedUser
+
+            Log.d("UserProfile", "User profile updated successfully")
+            return true
+
+        } catch (e: Exception) {
+            Log.e("UserProfile", "Error updating user profile", e)
+            return false
+        }
+    }
 }
