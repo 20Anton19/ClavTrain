@@ -39,16 +39,23 @@ fun AdminNav(onExitApp: () -> Unit) {
         }
         composable(Route.AdminExercises.path) {
             AdminExercisesScreen(
-                onEditExerciseScreen = {
-                    navController.navigate(Route.AdminEditExercise.path)
+                onEditExerciseScreen = { exerciseId ->
+                    navController.navigate(Route.AdminEditExercise.createRoute(exerciseId))
                 },
                 onBackClick = {
                     navController.popBackStack()
                 }
             )
         }
-            composable(Route.AdminEditExercise.path) {
+            composable(
+                Route.AdminEditExercise.path,
+                arguments = listOf(
+                    navArgument("exerciseId") { type = NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val exerciseId = backStackEntry.arguments?.getInt("exerciseId") ?: 0
                 AdminEditExerciseScreen(
+                    exerciseId = exerciseId,
                     onBackClick = {
                         navController.popBackStack()
                     }
