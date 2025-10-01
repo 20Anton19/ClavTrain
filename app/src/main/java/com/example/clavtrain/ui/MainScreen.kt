@@ -39,7 +39,7 @@ fun MainScreen(
     onLoginClick: () -> Unit,
     onRoleDetermined: (UserRole?) -> Unit,  // ← Колбэк для определения роли
     viewModel: MainViewModel = koinViewModel(),
-    //dataBaseViewModel: DataBaseViewModel = koinViewModel()
+//    dataBaseViewModel: DataBaseViewModel = koinViewModel()
 ) {
 //    val currentTime = System.currentTimeMillis()
 //    LaunchedEffect(Unit) {

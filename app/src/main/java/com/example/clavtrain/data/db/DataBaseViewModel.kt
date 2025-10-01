@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
@@ -55,6 +56,17 @@ class DataBaseViewModel(
 
     fun getExercisesByDifficultyId(difficultyId: Int): Flow<List<Exercise>> {
         return dao.getExercisesByDifficultyId(difficultyId)
+    }
+
+    // Получаем все статистики текущего пользователя
+    fun getAllStatisticsForCurrentUser(): Flow<List<ExerciseStatistic>> {
+        val userId = _currentUser.value?.id ?: return flowOf(emptyList())
+        return dao.getStatisticsByUserId(userId)
+    }
+
+    // Устанавливаем выбранную статистику
+    fun setSelectedStatistic(statistic: ExerciseStatistic) {
+        _lastStatistic.value = statistic
     }
 
     fun getExerciseById(exerciseId: Int): Flow<Exercise?> {

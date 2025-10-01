@@ -44,10 +44,13 @@ interface Dao {
     @Upsert()
     suspend fun insertExerciseStatistic(exerciseStatistic: ExerciseStatistic)
 
-    //Получения всех статистик по id упражнения
+    //Получение всех статистик по id упражнения
     @Query("SELECT * FROM ExerciseStatistic WHERE exerciseId = :exerciseId ORDER BY completedAt DESC")
     fun getStatisticsByExerciseId(exerciseId: Int): Flow<List<ExerciseStatistic>>
 
+    //Получение всех статистик по user id
+    @Query("SELECT * FROM ExerciseStatistic WHERE userId = :userId ORDER BY completedAt DESC")
+    fun getStatisticsByUserId(userId: String): Flow<List<ExerciseStatistic>>
 
 }
 

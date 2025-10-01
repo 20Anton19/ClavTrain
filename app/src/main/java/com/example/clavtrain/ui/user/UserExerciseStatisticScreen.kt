@@ -185,13 +185,6 @@ fun UserExerciseStatisticScreen(
     onViewMenu: () -> Unit,
     dataBaseViewModel: DataBaseViewModel = koinViewModel()
 ) {
-//    val dataList = listOf<BarData>(
-//        BarData(10f, "авава"),
-//        BarData(10f, "авава"),
-//        BarData(10f, "авава"),
-//        BarData(10f, "авава"),
-//        BarData(10f, "авава")
-//    )
 
     val statistic by dataBaseViewModel.lastStatistic.collectAsState()
     val exerciseId = statistic?.exerciseId ?: 0
