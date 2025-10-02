@@ -73,6 +73,14 @@ fun AdminExercisesScreen(
 
         Spacer(modifier = Modifier.weight(1f))
         Button(
+            onClick = { onEditExerciseScreen(0) },
+            modifier = Modifier
+                .width(250.dp)
+                .padding(vertical = 4.dp)
+        ) {
+            Text("Добвить")
+        }
+        Button(
             onClick = onBackClick,
             modifier = Modifier
                 .width(250.dp)

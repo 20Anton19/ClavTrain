@@ -133,6 +133,50 @@ class ServerViewModel: ViewModel() {
             }
     }
 
+    fun updateExercise(exercise: Exercise) {
+        val exerciseId = exercise.id
+        if (exerciseId == null) {
+            // Создание нового упражнения
+            val newId = (allExercises.value.maxByOrNull { it.id ?: 0 }?.id ?: 0) + 1
+            val newExercise = exercise.copy(id = newId)
+
+            db.collection("exercises")
+                .document(newId.toString())
+                .set(mapOf(
+                    "id" to newExercise.id,
+                    "name" to newExercise.name,
+                    "difficultyId" to newExercise.difficultyId,
+                    "createdAt" to newExercise.createdAt,
+                    "text" to newExercise.text
+                ))
+                .addOnSuccessListener {
+                    Log.d("ServerViewModel", "Exercise created successfully")
+                    loadAllExercises()
+                }
+                .addOnFailureListener { e ->
+                    Log.e("ServerViewModel", "Error creating exercise", e)
+                }
+        } else {
+            // Обновление существующего упражнения
+            db.collection("exercises")
+                .document(exerciseId.toString())
+                .update(
+                    mapOf(
+                        "name" to exercise.name,
+                        "difficultyId" to exercise.difficultyId,
+                        "text" to exercise.text
+                    )
+                )
+                .addOnSuccessListener {
+                    Log.d("ServerViewModel", "Exercise $exerciseId updated successfully")
+                    loadAllExercises()
+                }
+                .addOnFailureListener { e ->
+                    Log.e("ServerViewModel", "Error updating exercise $exerciseId", e)
+                }
+        }
+    }
+
 //    fun insertInitialExercises() {
 //        val currentTime = System.currentTimeMillis()
 //
