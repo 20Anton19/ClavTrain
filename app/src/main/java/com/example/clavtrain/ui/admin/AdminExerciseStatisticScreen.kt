@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 
 @Composable
 fun AdminExerciseStatisticScreen(
+    exerciseId: Int,
     onBackClick: () -> Unit
 ) {
     Column(

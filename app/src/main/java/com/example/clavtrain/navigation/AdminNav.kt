@@ -115,16 +115,23 @@ fun AdminNav(onExitApp: () -> Unit) {
                 val userId = backStackEntry.arguments?.getString("userId") ?: ""
                 AdminUserStatisticScreen(
                     userId = userId,
-                    onViewAdminExerciseStatistic = {
-                        navController.navigate(Route.AdminExerciseStatistic.path)
+                    onViewAdminExerciseStatistic = { exerciseId ->
+                        navController.navigate(Route.AdminExerciseStatistic.createRoute(exerciseId))
                     },
                     onBackClick = {
                         navController.popBackStack()
                     }
                 )
             }
-                composable(Route.AdminExerciseStatistic.path) {
+                composable(
+                    Route.AdminExerciseStatistic.path,
+                    arguments = listOf(
+                        navArgument("exerciseId") { type = NavType.IntType }
+                    )
+                ) { backStackEntry ->
+                    val exerciseId = backStackEntry.arguments?.getInt("exerciseId") ?: 0
                     AdminExerciseStatisticScreen(
+                        exerciseId = exerciseId,
                         onBackClick = {
                             navController.popBackStack()
                         }

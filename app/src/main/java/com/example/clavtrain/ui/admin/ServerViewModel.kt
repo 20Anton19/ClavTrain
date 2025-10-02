@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.clavtrain.data.db.DifficultyLevel
 import com.example.clavtrain.data.db.Exercise
+import com.example.clavtrain.data.db.ExerciseStatistic
 import com.example.clavtrain.data.db.User
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
@@ -26,6 +27,9 @@ class ServerViewModel: ViewModel() {
 
     private val _users = MutableStateFlow<List<User>>(emptyList())
     val users: StateFlow<List<User>> = _users.asStateFlow()
+
+    private val _userStatistics = MutableStateFlow<List<ExerciseStatistic>>(emptyList())
+    val userStatistics: StateFlow<List<ExerciseStatistic>> = _userStatistics.asStateFlow()
 
     init {
         loadDifficultyLevels()
@@ -208,6 +212,37 @@ class ServerViewModel: ViewModel() {
             }
             .addOnFailureListener { e ->
                 Log.e("ServerViewModel", "Error loading users", e)
+            }
+    }
+
+    fun loadStatisticsByUserId(userId: String) {
+        db.collection("statistics")
+            .whereEqualTo("userId", userId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val statistics = mutableListOf<ExerciseStatistic>()
+                for (document in querySnapshot) {
+                    try {
+                        val data = document.data
+                        val statistic = ExerciseStatistic(
+                            id = (data["id"] as? Long)?.toInt(),
+                            userId = data["userId"] as? String ?: "",
+                            exerciseId = (data["exerciseId"] as? Long)?.toInt() ?: 0,
+                            mistakes = (data["mistakes"] as? Long)?.toInt() ?: 0,
+                            timeSpent = (data["timeSpent"] as? Long) ?: 0L,
+                            avgTime = (data["avgTime"] as? Long) ?: 0L,
+                            isSuccessful = data["isSuccessful"] as? Boolean ?: false,
+                            completedAt = (data["completedAt"] as? Long) ?: 0L
+                        )
+                        statistics.add(statistic)
+                    } catch (e: Exception) {
+                        Log.e("ServerViewModel", "Error parsing statistic ${document.id}", e)
+                    }
+                }
+                _userStatistics.value = statistics
+            }
+            .addOnFailureListener { e ->
+                Log.e("ServerViewModel", "Error loading statistics for user $userId", e)
             }
     }
 
