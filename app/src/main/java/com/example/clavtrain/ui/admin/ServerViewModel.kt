@@ -4,11 +4,14 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.clavtrain.data.db.DifficultyLevel
 import com.example.clavtrain.data.db.Exercise
+import com.example.clavtrain.data.db.User
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
 
 class ServerViewModel: ViewModel() {
     private val db = Firebase.firestore
@@ -20,6 +23,9 @@ class ServerViewModel: ViewModel() {
 
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Idle)
     val updateState: StateFlow<UpdateState> = _updateState.asStateFlow()
+
+    private val _users = MutableStateFlow<List<User>>(emptyList())
+    val users: StateFlow<List<User>> = _users.asStateFlow()
 
     init {
         loadDifficultyLevels()
@@ -175,6 +181,34 @@ class ServerViewModel: ViewModel() {
                     Log.e("ServerViewModel", "Error updating exercise $exerciseId", e)
                 }
         }
+    }
+
+    fun loadAllUsers() {
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val users = mutableListOf<User>()
+                for (document in querySnapshot) {
+                    try {
+                        val data = document.data
+                        val user = User(
+                            id = data["userId"] as? String ?: "",
+                            email = data["email"] as? String ?: "",
+                            password = data["password"] as? String ?: "",
+                            firstName = data["firstName"] as? String ?: "",
+                            middleName = data["middleName"] as? String ?: "",
+                            lastName = data["lastName"] as? String ?: ""
+                        )
+                        users.add(user)
+                    } catch (e: Exception) {
+                        Log.e("ServerViewModel", "Error parsing user ${document.id}", e)
+                    }
+                }
+                _users.value = users
+            }
+            .addOnFailureListener { e ->
+                Log.e("ServerViewModel", "Error loading users", e)
+            }
     }
 
 //    fun insertInitialExercises() {

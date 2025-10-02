@@ -45,6 +45,12 @@ sealed class Route(val path: String) {
     }
 
 
+    object AdminUserStatistic : Route("admin_user_statistic/{userId}"){  // ← добавляем параметр
+        fun createRoute(userId: String) = "admin_exercise_statistic/$userId"
+    }
+    object AdminExerciseStatistic : Route("admin_exercise_statistic")
+
+
 
 
 

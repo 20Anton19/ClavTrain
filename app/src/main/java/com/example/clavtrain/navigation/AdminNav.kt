@@ -10,8 +10,11 @@ import androidx.navigation.navArgument
 import com.example.clavtrain.ui.admin.AdminDifficultyScreen
 import com.example.clavtrain.ui.admin.AdminEditDifficultyScreen
 import com.example.clavtrain.ui.admin.AdminEditExerciseScreen
+import com.example.clavtrain.ui.admin.AdminExerciseStatisticScreen
 import com.example.clavtrain.ui.admin.AdminExercisesScreen
 import com.example.clavtrain.ui.admin.AdminModeScreen
+import com.example.clavtrain.ui.admin.AdminUserStatisticScreen
+import com.example.clavtrain.ui.admin.AdminUsersScreen
 import com.example.clavtrain.ui.user.UserExercisesScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -93,23 +96,39 @@ fun AdminNav(onExitApp: () -> Unit) {
                 )
             }
 
+        composable(Route.AdminUsers.path) {
+            AdminUsersScreen(
+                onViewAdminUserStatistic = { userId ->
+                    navController.navigate(Route.AdminUserStatistic.createRoute(userId))
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
             composable(
-                route = Route.UserExercises.path,  // "user_exercises/{levelIndex}"
+                Route.AdminUserStatistic.path,
                 arguments = listOf(
-                    navArgument("levelIndex") { type = NavType.IntType }
+                    navArgument("userId") { type = NavType.StringType }
                 )
             ) { backStackEntry ->
-                val levelIndex = backStackEntry.arguments?.getInt("levelIndex") ?: 0
-
-                UserExercisesScreen(
-                    levelIndex = levelIndex,  // ← передаем индекс
-                    onStartTraining = { exerciseId ->
-                        navController.navigate(Route.UserTraining.createRoute(exerciseId))
+                val userId = backStackEntry.arguments?.getString("userId") ?: ""
+                AdminUserStatisticScreen(
+                    userId = userId,
+                    onViewAdminExerciseStatistic = {
+                        navController.navigate(Route.AdminExerciseStatistic.path)
                     },
                     onBackClick = {
                         navController.popBackStack()
                     }
                 )
             }
+                composable(Route.AdminExerciseStatistic.path) {
+                    AdminExerciseStatisticScreen(
+                        onBackClick = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
     }
 }
