@@ -31,6 +31,9 @@ class ServerViewModel: ViewModel() {
     private val _userStatistics = MutableStateFlow<List<ExerciseStatistic>>(emptyList())
     val userStatistics: StateFlow<List<ExerciseStatistic>> = _userStatistics.asStateFlow()
 
+    private val _exerciseStatistics = MutableStateFlow<List<ExerciseStatistic>>(emptyList())
+    val exerciseStatistics: StateFlow<List<ExerciseStatistic>> = _exerciseStatistics.asStateFlow()
+
     init {
         loadDifficultyLevels()
         loadAllExercises()
@@ -243,6 +246,37 @@ class ServerViewModel: ViewModel() {
             }
             .addOnFailureListener { e ->
                 Log.e("ServerViewModel", "Error loading statistics for user $userId", e)
+            }
+    }
+
+    fun loadStatisticsByExerciseId(exerciseId: Int) {
+        db.collection("statistics")
+            .whereEqualTo("exerciseId", exerciseId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                val statistics = mutableListOf<ExerciseStatistic>()
+                for (document in querySnapshot) {
+                    try {
+                        val data = document.data
+                        val statistic = ExerciseStatistic(
+                            id = (data["id"] as? Long)?.toInt(),
+                            userId = data["userId"] as? String ?: "",
+                            exerciseId = (data["exerciseId"] as? Long)?.toInt() ?: 0,
+                            mistakes = (data["mistakes"] as? Long)?.toInt() ?: 0,
+                            timeSpent = (data["timeSpent"] as? Long) ?: 0L,
+                            avgTime = (data["avgTime"] as? Long) ?: 0L,
+                            isSuccessful = data["isSuccessful"] as? Boolean ?: false,
+                            completedAt = (data["completedAt"] as? Long) ?: 0L
+                        )
+                        statistics.add(statistic)
+                    } catch (e: Exception) {
+                        Log.e("ServerViewModel", "Error parsing statistic ${document.id}", e)
+                    }
+                }
+                _exerciseStatistics.value = statistics
+            }
+            .addOnFailureListener { e ->
+                Log.e("ServerViewModel", "Error loading statistics for exercise $exerciseId", e)
             }
     }
 
