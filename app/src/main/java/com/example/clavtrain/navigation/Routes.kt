@@ -53,6 +53,9 @@ sealed class Route(val path: String) {
     }
 
 
+    data object AdminExerciseGlobalStatistic : Route("admin_exercise_global_statistic/{exerciseId}"){  // ← добавляем параметр
+        fun createRoute(exerciseId: Int) = "admin_exercise_global_statistic/$exerciseId"
+    }
 
 
 

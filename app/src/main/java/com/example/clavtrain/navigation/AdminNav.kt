@@ -10,9 +10,11 @@ import androidx.navigation.navArgument
 import com.example.clavtrain.ui.admin.AdminDifficultyScreen
 import com.example.clavtrain.ui.admin.AdminEditDifficultyScreen
 import com.example.clavtrain.ui.admin.AdminEditExerciseScreen
+import com.example.clavtrain.ui.admin.AdminExerciseGlobalStatisticScreen
 import com.example.clavtrain.ui.admin.AdminExerciseStatisticScreen
 import com.example.clavtrain.ui.admin.AdminExercisesScreen
 import com.example.clavtrain.ui.admin.AdminModeScreen
+import com.example.clavtrain.ui.admin.AdminStatsScreen
 import com.example.clavtrain.ui.admin.AdminUserStatisticScreen
 import com.example.clavtrain.ui.admin.AdminUsersScreen
 import com.example.clavtrain.ui.user.UserExercisesScreen
@@ -137,5 +139,30 @@ fun AdminNav(onExitApp: () -> Unit) {
                         }
                     )
                 }
+
+        composable(Route.AdminStats.path) {
+            AdminStatsScreen(
+                onViewExerciseGlobalStatistic = { exerciseId ->
+                    navController.navigate(Route.AdminExerciseGlobalStatistic.createRoute(exerciseId))
+                },
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(
+            Route.AdminExerciseGlobalStatistic.path,
+            arguments = listOf(
+                navArgument("exerciseId") { type = NavType.IntType }
+            )
+        ) { backStackEntry ->
+            val exerciseId = backStackEntry.arguments?.getInt("exerciseId") ?: 0
+            AdminExerciseGlobalStatisticScreen(
+                exerciseId = exerciseId,
+                onBackClick = {
+                    navController.popBackStack()
+                }
+            )
+        }
     }
 }
